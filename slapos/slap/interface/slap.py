@@ -136,6 +136,12 @@ class IComputerPartition(IBuildoutController):
     available and started.
     """
 
+  def destroyed():
+    """
+    Notify (to the slapgrid server) that the software instance has
+    been correctly destroyed.
+    """
+
   def getId():
     """
     Returns a string representing the identifier of the computer partition
@@ -174,6 +180,14 @@ class IComputerPartition(IBuildoutController):
                  It can be an XML for example.
     """
 
+  def bang(log):
+    """
+    Report a problem detected on a computer partition.
+    This will trigger the reinstanciation of all partitions in the instance tree.
+
+    log -- a text explaining why the method was called
+    """
+
 class IComputer(Interface):
   """
   Computer interface specification
@@ -207,6 +221,15 @@ class IComputer(Interface):
 
     computer_partition_list -- a list of computer partition for which the usage
                                needs to be reported.
+    """
+
+  def bang(log):
+    """
+    Report a problem detected on a computer.
+    This will trigger IComputerPartition.bang on all instances hosted by the
+    Computer.
+
+    log -- a text explaining why the method was called
     """
 
 class IOpenOrder(Interface):
