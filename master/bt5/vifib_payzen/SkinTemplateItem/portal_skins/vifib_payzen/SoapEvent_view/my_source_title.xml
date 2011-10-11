@@ -20,7 +20,7 @@
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>my_destination_title</string> </value>
+            <value> <string>my_source_title</string> </value>
         </item>
         <item>
             <key> <string>message_values</string> </key>
@@ -106,15 +106,15 @@
                     <value>
                       <list>
                         <tuple>
-                          <string>Payment Transaction</string>
-                          <string>Payment Transaction</string>
+                          <string>Payzen Service</string>
+                          <string>Payzen Service</string>
                         </tuple>
                       </list>
                     </value>
                 </item>
                 <item>
                     <key> <string>title</string> </key>
-                    <value> <string>Payment Transaction</string> </value>
+                    <value> <string>Payzen Service</string> </value>
                 </item>
               </dictionary>
             </value>
