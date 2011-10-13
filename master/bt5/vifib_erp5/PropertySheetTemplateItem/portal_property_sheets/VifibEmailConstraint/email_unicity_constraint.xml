@@ -21,9 +21,7 @@
         <item>
             <key> <string>constraint_property</string> </key>
             <value>
-              <tuple>
-                <string>coordinate_text</string>
-              </tuple>
+              <tuple/>
             </value>
         </item>
         <item>
@@ -34,11 +32,23 @@
         </item>
         <item>
             <key> <string>filter_parameter</string> </key>
-            <value> <string>python: {\'portal_type\': object.getPortalType(), \'url_string\': object.getUrlString(), \'parent_portal_type\': object.getParentValue().getPortalType()}</string> </value>
+            <value> <string>python: {\'portal_type\': object.getPortalType(), \'url_string\': object.asText(), \'parent_portal_type\': object.getParentValue().getPortalType()}</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
             <value> <string>email_unicity_constraint</string> </value>
+        </item>
+        <item>
+            <key> <string>int_index</string> </key>
+            <value>
+              <none/>
+            </value>
+        </item>
+        <item>
+            <key> <string>membership_criterion_category</string> </key>
+            <value>
+              <tuple/>
+            </value>
         </item>
         <item>
             <key> <string>message_invalid_attribute_unicity</string> </key>
@@ -47,6 +57,22 @@
         <item>
             <key> <string>portal_type</string> </key>
             <value> <string>Attribute Unicity Constraint</string> </value>
+        </item>
+        <item>
+            <key> <string>string_index</string> </key>
+            <value>
+              <none/>
+            </value>
+        </item>
+        <item>
+            <key> <string>test_method_id</string> </key>
+            <value>
+              <tuple/>
+            </value>
+        </item>
+        <item>
+            <key> <string>test_tales_expression</string> </key>
+            <value> <string>python: object.getCoordinateText("") != ""</string> </value>
         </item>
       </dictionary>
     </pickle>
