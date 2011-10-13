@@ -1,5 +1,9 @@
 <workflow_chain>
  <chain>
+  <type>Payment Transaction</type>
+  <workflow>payzen_interface_workflow</workflow>
+ </chain>
+ <chain>
   <type>Soap Event</type>
   <workflow>edit_workflow</workflow>
  </chain>
