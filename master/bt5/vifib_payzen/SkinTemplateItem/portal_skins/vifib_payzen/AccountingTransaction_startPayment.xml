@@ -53,7 +53,7 @@
             <value> <string>from DateTime import DateTime\n
 portal = context.getPortalObject()\n
 service = portal.portal_secure_payments.find()\n
-integration_tool = context.restrictedTraverse(\'portal_integrations/vifib_payzen_integration\')\n
+integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
 now_utc = DateTime().toZone(\'UTC\')\n
 today = now_utc.strftime(\'%Y%m%d\')\n
 transaction_id = str(portal.portal_ids.generateNewId(\n
