@@ -51,7 +51,24 @@
         <item>
             <key> <string>_body</string> </key>
             <value> <string>payment_transaction = state_change[\'object\']\n
-raise NotImplementedError(payment_transaction.getRelativeUrl())\n
+portal = payment_transaction.getPortalObject()\n
+service = portal.portal_secure_payments.find()\n
+integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
+\n
+transaction_id = integration_tool.getMappingFromCategory(\'causality/%s\' % payment_transaction.getRelativeUrl()).split(\'/\')[1]\n
+transmissionDate, transactionId = transaction_id.split(\'_\')\n
+\n
+result, signature, sent, received = service.soap_getInfo(transmissionDate, transactionId)\n
+\n
+system_event_kw = {\n
+  \'portal_type\': \'Soap Event\',\n
+  \'source_value\': service,\n
+  \'destination_value\': payment_transaction,\n
+}\n
+\n
+sent = portal.system_event_module.newContent(title=\'Sent at\', text_content=sent, **system_event_kw)\n
+portal.system_event_module.newContent(title=\'Received\', text_content=received, predecessor_value=sent, **system_event_kw)\n
+script.log(result, signature)\n
 </string> </value>
         </item>
         <item>
