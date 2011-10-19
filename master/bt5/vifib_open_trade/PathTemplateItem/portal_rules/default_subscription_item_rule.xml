@@ -133,7 +133,7 @@
         </item>
         <item>
             <key> <string>version</string> </key>
-            <value> <string>001</string> </value>
+            <value> <string>1</string> </value>
         </item>
       </dictionary>
     </pickle>
