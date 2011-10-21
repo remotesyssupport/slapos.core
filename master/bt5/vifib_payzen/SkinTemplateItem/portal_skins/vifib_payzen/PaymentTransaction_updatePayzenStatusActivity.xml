@@ -50,10 +50,59 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>from Products.DCWorkflow.DCWorkflow import ValidationFailed\n
+            <value> <string>def storeWorkflowComment(context, comment):\n
+  portal = context.getPortalObject()\n
+  workflow_tool = portal.portal_workflow\n
+  workflow_tool.doActionFor(context, \'edit_action\', comment=comment)\n
+\n
+from Products.DCWorkflow.DCWorkflow import ValidationFailed\n
 if not signature:\n
   raise ValidationFailed(\'Signature does not match\')\n
-raise NotImplementedError\n
+\n
+transaction_code_mapping = {\n
+  \'0\' : \'Initial (being treated)\',\n
+  \'1\' : \'To be validated \',\n
+  \'2\' : \'To be forced – Contact issuer\',\n
+  \'3\' : \'To be validated and authorized\',\n
+  \'4\' : \'Waiting for submission\',\n
+  \'5\' : \'Waiting for authorization\',\n
+  \'6\' : \'Submitted\',\n
+  \'7\' : \'Expired\',\n
+  \'8\' : \'Refused\',\n
+  \'9\' : \'Cancelled\',\n
+  \'10\': \'Waiting\',\n
+  \'11\': \'Being submitted\',\n
+  \'12\': \'Being authorized\',\n
+  \'13\': \'Failed\',\n
+}\n
+\n
+transaction_status = data_kw[\'transactionStatus\']\n
+transaction_status_description = transaction_code_mapping.get(transaction_status, None)\n
+if transaction_status_description is None:\n
+  raise ValueError(\'Unknown transactionStatus %r\' % transaction_status)\n
+portal = context.getPortalObject()\n
+integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
+mark_transaction_id_list = [\'0\', \'1\', \'3\', \'4\', \'5\', \'10\', \'11\', \'12\']\n
+continue_transaction_id_list = [\'6\']\n
+\n
+if transaction_status in mark_transaction_id_list:\n
+  # Mark on payment transaction history log that transaction was not processed yet\n
+  storeWorkflowComment(context, \'Transaction status %s (%s) did not changed the document state\' % (transaction_status, transaction_status_description))\n
+  pass\n
+elif transaction_status in continue_transaction_id_list:\n
+  # Check authAmount and authDevise and if match, start transaction\n
+  auth_amount = int(data_kw[\'authAmount\'])\n
+  auth_devise = data_kw[\'authDevise\']\n
+  transaction_amount = int(round((context.PaymentTransaction_getTotalPayablePrice() * 100), 2))\n
+  if transaction_amount != auth_amount:\n
+    raise ValueError(\'Received amount (%r) does not match stored on transaction (%r)\'% (auth_amount, transaction_amount))\n
+  transaction_devise = integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % context.getResourceReference()).split(\'/\')[-1]\n
+  if transaction_devise != auth_devise:\n
+    raise ValueError(\'Received devise (%r) does not match stored on transaction (%r)\'% (auth_devise, transaction_devise))\n
+  workflow_tool = portal.portal_workflow\n
+  workflow_tool.doActionFor(context, \'start_action\', comment=\'Started transaction because of received status %s (%s)\' % (transaction_status, transaction_status_description))\n
+else:\n
+  raise NotImplementedError(\'Transaction status %r (%r) is not supported\' % (transcation_status, transaction_descrption))\n
 </string> </value>
         </item>
         <item>
