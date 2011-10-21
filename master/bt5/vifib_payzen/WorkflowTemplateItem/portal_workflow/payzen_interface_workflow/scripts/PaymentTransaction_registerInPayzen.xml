@@ -55,6 +55,60 @@
 In order to not transmit sensitive information the registration is done by looking the newest\n
 payzen related transaction for destination_section and doing its duplicate"""\n
 \n
+transaction = state_change[\'object\']\n
+portal = transaction.getPortalObject()\n
+integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
+state_list = portal.getPortalCurrentInventoryStateList() + portal.getPortalTransitInventoryStateList()\n
+service = portal.portal_secure_payments.find()\n
+transaction_list = portal.portal_catalog(\n
+  destination_section_uid = transaction.getDestinationSectionUid(),\n
+  portal_type=transaction.getPortalType(),\n
+  simulation_state=state_list,\n
+  sort_on=((\'delivery.start_date\', \'DESC\')),\n
+  # optional: catalog based in-payzen transaction, for now we believe that one of last 10 will be payzen related\n
+  limit=10,\n
+)\n
+\n
+if len(transaction_list) == 0:\n
+  raise ValueError(\'It was not possible to find any previous transaction\')\n
+\n
+previous_id = None\n
+for previous_transaction in transaction_list:\n
+  possible_previous_id =  integration_tool.getMappingFromCategory(\'causality/%s\' % previous_transaction.getRelativeUrl())\n
+  if possible_previous_id != \'Causality/%s\' % transaction.getRelativeUrl():\n
+    previous_id = possible_previous_id.split(\'/\')[1]\n
+\n
+if previous_id is None:\n
+  raise ValueError(\'It was not possible to find any previous Payzen related transaction\')\n
+\n
+previous_id, previous_date = previous_id.split(\'_\')\n
+now_utc = DateTime().toZone(\'UTC\')\n
+today = now_utc.strftime(\'%Y%m%d\')\n
+transaction_id = str(portal.portal_ids.generateNewId(\n
+    id_group=\'%s_%s\' % (service.getRelativeUrl(), today),\n
+    id_generator=\'uid\')).zfill(6)\n
+\n
+mapping_id = \'%s_%s\' % (today, transaction_id)\n
+\n
+assert integration_tool.getMappingFromCategory(\'causality/%s\' % transaction.getRelativeUrl()) == \'Causality/%s\' % transaction.getRelativeUrl()\n
+try:\n
+  integration_tool.getCategoryFromMapping(\'Causality/%s\' % mapping_id, create_mapping_line=True, create_mapping=True)\n
+except ValueError:\n
+  mapping = integration_tool.Causality[mapping_id]\n
+  mapping.setDestinationReference(\'causality/%s\' % context.getRelativeUrl())\n
+else:\n
+  raise ValueError(\'Key %s already found!\' % id)\n
+\n
+# do causality mapping in integration_tool between context.getRelativeUrl and today + transaction_id\n
+payzen_dict = {}\n
+payzen_dict.update(\n
+  vads_currency=integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % transaction.getResourceReference()).split(\'/\')[-1],\n
+  vads_amount=str(int(round((transaction.PaymentTransaction_getTotalPayablePrice() * 100), 0))),\n
+  vads_trans_date=now_utc.strftime(\'%Y%m%d%H%M%S\'),\n
+  vads_trans_id=transaction_id,\n
+  vads_language=\'en\',\n
+)\n
+  \n
 raise NotImplementedError\n
 </string> </value>
         </item>
