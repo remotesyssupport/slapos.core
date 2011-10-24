@@ -55,6 +55,7 @@
 In order to not transmit sensitive information the registration is done by looking the newest\n
 payzen related transaction for destination_section and doing its duplicate"""\n
 \n
+\n
 transaction = state_change[\'object\']\n
 portal = transaction.getPortalObject()\n
 integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
@@ -81,7 +82,7 @@ for previous_transaction in transaction_list:\n
 if previous_id is None:\n
   raise ValueError(\'It was not possible to find any previous Payzen related transaction\')\n
 \n
-previous_id, previous_date = previous_id.split(\'_\')\n
+previous_date, previous_id = previous_id.split(\'_\')\n
 now_utc = DateTime().toZone(\'UTC\')\n
 today = now_utc.strftime(\'%Y%m%d\')\n
 transaction_id = str(portal.portal_ids.generateNewId(\n
@@ -95,21 +96,35 @@ try:\n
   integration_tool.getCategoryFromMapping(\'Causality/%s\' % mapping_id, create_mapping_line=True, create_mapping=True)\n
 except ValueError:\n
   mapping = integration_tool.Causality[mapping_id]\n
-  mapping.setDestinationReference(\'causality/%s\' % context.getRelativeUrl())\n
+  mapping.setDestinationReference(\'causality/%s\' % transaction.getRelativeUrl())\n
 else:\n
   raise ValueError(\'Key %s already found!\' % id)\n
 \n
-# do causality mapping in integration_tool between context.getRelativeUrl and today + transaction_id\n
+# do causality mapping in integration_tool between transaction.getRelativeUrl and today + transaction_id\n
 payzen_dict = {}\n
 payzen_dict.update(\n
-  vads_currency=integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % transaction.getResourceReference()).split(\'/\')[-1],\n
-  vads_amount=str(int(round((transaction.PaymentTransaction_getTotalPayablePrice() * 100), 0))),\n
-  vads_trans_date=now_utc.strftime(\'%Y%m%d%H%M%S\'),\n
-  vads_trans_id=transaction_id,\n
-  vads_language=\'en\',\n
+  devise=integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % transaction.getResourceReference()).split(\'/\')[-1],\n
+  amount=str(int(round((transaction.PaymentTransaction_getTotalPayablePrice() * 100), 0))),\n
+  presentationDate=now_utc,\n
+  newTransactionId=transaction_id,\n
+  transmissionDate=DateTime(previous_date),\n
+  transactionId=previous_id\n
 )\n
-  \n
-raise NotImplementedError\n
+\n
+data_kw, signature, sent, received = service.soap_duplicate(**payzen_dict)\n
+\n
+system_event_kw = {\n
+  \'portal_type\': \'Soap Event\',\n
+  \'source_value\': service,\n
+  \'destination_value\': transaction,\n
+}\n
+\n
+sent = portal.system_event_module.newContent(title=\'Sent\', text_content=sent, **system_event_kw)\n
+portal.system_event_module.newContent(title=\'Received\', text_content=received, predecessor_value=sent, **system_event_kw)\n
+\n
+# escape from transaction boundaries\n
+# call real method in activites, thanks to this log messages will get committed into ZODB\n
+transaction.activate().PaymentTransaction_registerInPayzenActivity(data_kw, signature)\n
 </string> </value>
         </item>
         <item>

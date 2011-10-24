@@ -56,7 +56,7 @@
   workflow_tool.doActionFor(context, \'edit_action\', comment=comment)\n
 \n
 from Products.DCWorkflow.DCWorkflow import ValidationFailed\n
-if not signature:\n
+if signature is not True:\n
   raise ValidationFailed(\'Signature does not match\')\n
 \n
 transaction_code_mapping = {\n

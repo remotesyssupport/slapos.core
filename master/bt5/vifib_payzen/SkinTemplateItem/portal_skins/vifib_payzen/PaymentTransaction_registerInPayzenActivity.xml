@@ -50,38 +50,17 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>payment_transaction = state_change[\'object\']\n
-portal = payment_transaction.getPortalObject()\n
-service = portal.portal_secure_payments.find()\n
-integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
-from DateTime import DateTime\n
-\n
-transaction_id = integration_tool.getMappingFromCategory(\'causality/%s\' % payment_transaction.getRelativeUrl()).split(\'/\')[1]\n
-transmissionDate, transactionId = transaction_id.split(\'_\')\n
-\n
-data_kw, signature, sent, received = service.soap_getInfo(DateTime(transmissionDate), transactionId)\n
-\n
-system_event_kw = {\n
-  \'portal_type\': \'Soap Event\',\n
-  \'source_value\': service,\n
-  \'destination_value\': payment_transaction,\n
-}\n
-\n
-sent = portal.system_event_module.newContent(title=\'Sent\', text_content=sent, **system_event_kw)\n
-portal.system_event_module.newContent(title=\'Received\', text_content=received, predecessor_value=sent, **system_event_kw)\n
-\n
-# escape from transaction boundaries\n
-# call real method in activites, thanks to this log messages will get committed into ZODB\n
-payment_transaction.activate().PaymentTransaction_updatePayzenStatusActivity(data_kw, signature)\n
+            <value> <string># For now exactly the same as update\n
+context.PaymentTransaction_updatePayzenStatusActivity(data_kw, signature)\n
 </string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>state_change</string> </value>
+            <value> <string>data_kw, signature</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>PaymentTransaction_updatePayzenStatus</string> </value>
+            <value> <string>PaymentTransaction_registerInPayzenActivity</string> </value>
         </item>
       </dictionary>
     </pickle>
