@@ -123,12 +123,12 @@ payzen_dict.update(\n
   transactionId=previous_id\n
 )\n
 \n
-data_kw, signature, sent, received = service.soap_duplicate(**payzen_dict)\n
+data_kw, signature, sent_text, received_text = service.soap_duplicate(**payzen_dict)\n
 \n
-sent.edit(text_content=sent)\n
+sent.edit(text_content=sent_text)\n
 sent.confirm()\n
 sent.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
-received = portal.system_event_module.newContent(title=\'Received\', text_content=received, predecessor_value=sent, **system_event_kw)\n
+received = portal.system_event_module.newContent(title=\'Received\', text_content=received_text, predecessor_value=sent, **system_event_kw)\n
 \n
 context.PaymentTransaction_processUpdate(state_change, data_kw, signature, system_event=received.getRelativeUrl())\n
 </string> </value>
