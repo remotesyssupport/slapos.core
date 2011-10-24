@@ -108,9 +108,10 @@ if (request_software_instance is None):\n
       portal_type=hosting_subscription_portal_type,\n
       reference=hosting_subscription_reference,\n
       title=software_title,\n
+      specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
       activate_kw={\'tag\': tag},\n
     )\n
-    subscription.start()\n
+    subscription.validate()\n
     if state == \'started\':\n
       software_instance.startRequested()\n
     elif state == \'stopped\':\n
@@ -164,11 +165,19 @@ if (request_software_instance is None):\n
         open_order.order()\n
         open_order.validate()\n
 \n
+    today=DateTime()\n
+    start_date=DateTime(today.year(), today.month(), 1)\n
+    stop_date=DateTime(today.year() + 1, today.month(), 1)\n
+\n
     open_order.newContent(\n
       portal_type="Open Sale Order Line",\n
       title=software_title,\n
       aggregate_value=subscription,\n
-      specialise_value=\'sale_trade_condition_module/1\',\n
+      start_date=start_date,\n
+      stop_date=stop_date,\n
+      quantity=1,\n
+      price=1,\n
+      specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
       activate_kw={\'tag\': tag},\n
     )\n
 \n
