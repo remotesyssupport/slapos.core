@@ -50,14 +50,21 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>def storeWorkflowComment(context, comment):\n
-  portal = context.getPortalObject()\n
+            <value> <string>def storeWorkflowComment(ctx, comment):\n
+  portal = ctx.getPortalObject()\n
   workflow_tool = portal.portal_workflow\n
-  workflow_tool.doActionFor(context, \'edit_action\', comment=comment)\n
+  workflow_tool.doActionFor(ctx, \'edit_action\', comment=comment)\n
+\n
+transaction = state_change[\'object\']\n
+portal = transaction.getPortalObject()\n
+\n
+system_event = portal.restrictedTraverse(system_event)\n
 \n
 from Products.DCWorkflow.DCWorkflow import ValidationFailed\n
 if signature is not True:\n
-  raise ValidationFailed(\'Signature does not match\')\n
+  # signature is wrong, bye bye\n
+  system_event.confirm(comment=\'Signature does not match\')\n
+  return\n
 \n
 transaction_code_mapping = {\n
   \'0\' : \'Initial (being treated)\',\n
@@ -79,39 +86,52 @@ transaction_code_mapping = {\n
 transaction_status = data_kw[\'transactionStatus\']\n
 transaction_status_description = transaction_code_mapping.get(transaction_status, None)\n
 if transaction_status_description is None:\n
-  raise ValueError(\'Unknown transactionStatus %r\' % transaction_status)\n
-portal = context.getPortalObject()\n
+  system_event.confirm(comment=\'Unknown transactionStatus %r\' % transaction_status)\n
+  return\n
 integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
 mark_transaction_id_list = [\'0\', \'1\', \'3\', \'4\', \'5\', \'10\', \'11\', \'12\']\n
 continue_transaction_id_list = [\'6\']\n
 \n
 if transaction_status in mark_transaction_id_list:\n
   # Mark on payment transaction history log that transaction was not processed yet\n
-  storeWorkflowComment(context, \'Transaction status %s (%s) did not changed the document state\' % (transaction_status, transaction_status_description))\n
-  pass\n
+  storeWorkflowComment(transaction, \'Transaction status %s (%s) did not changed the document state\' % (transaction_status, transaction_status_description))\n
+  system_event.confirm()\n
+  system_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
 elif transaction_status in continue_transaction_id_list:\n
   # Check authAmount and authDevise and if match, start transaction\n
   auth_amount = int(data_kw[\'authAmount\'])\n
   auth_devise = data_kw[\'authDevise\']\n
-  transaction_amount = int(round((context.PaymentTransaction_getTotalPayablePrice() * 100), 2))\n
+  transaction_amount = int(round((transaction.PaymentTransaction_getTotalPayablePrice() * 100), 2))\n
   if transaction_amount != auth_amount:\n
-    raise ValueError(\'Received amount (%r) does not match stored on transaction (%r)\'% (auth_amount, transaction_amount))\n
-  transaction_devise = integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % context.getResourceReference()).split(\'/\')[-1]\n
+    system_event.confirm(comment=\'Received amount (%r) does not match stored on transaction (%r)\'% (auth_amount, transaction_amount))\n
+    return\n
+  transaction_devise = integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % transaction.getResourceReference()).split(\'/\')[-1]\n
   if transaction_devise != auth_devise:\n
-    raise ValueError(\'Received devise (%r) does not match stored on transaction (%r)\'% (auth_devise, transaction_devise))\n
+    system_event.confirm(comment=\'Received devise (%r) does not match stored on transaction (%r)\'% (auth_devise, transaction_devise))\n
+    return\n
   workflow_tool = portal.portal_workflow\n
-  workflow_tool.doActionFor(context, \'start_action\', comment=\'Started transaction because of received status %s (%s)\' % (transaction_status, transaction_status_description))\n
+  if workflow_tool.isTransitionPossible(transcation, \'start_action\'):\n
+    try:\n
+      workflow_tool.doActionFor(transaction, \'start_action\', comment=\'Started transaction because of received status %s (%s)\' % (transaction_status, transaction_status_description))\n
+    except ValidationFailed, e:\n
+      system_event.confirm(comment=\'It was not possible to start, validation failed with: %r\' % e)\n
+  else:\n
+    system_event.confirm(comment=\'start_action is not available on transaction.\')\n
+    return\n
+  system_event.confirm()\n
+  system_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
 else:\n
-  raise NotImplementedError(\'Transaction status %r (%r) is not supported\' % (transcation_status, transaction_descrption))\n
+  system_event.confirm(\'Transaction status %r (%r) is not supported\' % (transcation_status, transaction_descrption))\n
+  return\n
 </string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>data_kw, signature</string> </value>
+            <value> <string>state_change, data_kw, signature, system_event</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>PaymentTransaction_updatePayzenStatusActivity</string> </value>
+            <value> <string>PaymentTransaction_processUpdate</string> </value>
         </item>
       </dictionary>
     </pickle>

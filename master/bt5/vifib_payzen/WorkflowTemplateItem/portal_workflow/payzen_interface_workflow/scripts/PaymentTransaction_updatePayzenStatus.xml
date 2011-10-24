@@ -68,11 +68,11 @@ system_event_kw = {\n
 }\n
 \n
 sent = portal.system_event_module.newContent(title=\'Sent\', text_content=sent, **system_event_kw)\n
-portal.system_event_module.newContent(title=\'Received\', text_content=received, predecessor_value=sent, **system_event_kw)\n
+sent.confirm()\n
+sent.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
+received = portal.system_event_module.newContent(title=\'Received\', text_content=received, predecessor_value=sent, **system_event_kw)\n
 \n
-# escape from transaction boundaries\n
-# call real method in activites, thanks to this log messages will get committed into ZODB\n
-payment_transaction.activate().PaymentTransaction_updatePayzenStatusActivity(data_kw, signature)\n
+context.PaymentTransaction_processUpdate(state_change, data_kw, signature, system_event=received.getRelativeUrl())\n
 </string> </value>
         </item>
         <item>
