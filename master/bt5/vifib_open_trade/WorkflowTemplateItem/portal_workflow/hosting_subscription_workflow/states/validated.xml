@@ -7,13 +7,36 @@
     <pickle>
       <dictionary>
         <item>
+            <key> <string>description</string> </key>
+            <value> <string></string> </value>
+        </item>
+        <item>
             <key> <string>id</string> </key>
-            <value> <string>pending</string> </value>
+            <value> <string>validated</string> </value>
         </item>
         <item>
             <key> <string>permission_roles</string> </key>
             <value>
               <persistent> <string encoding="base64">AAAAAAAAAAI=</string> </persistent>
+            </value>
+        </item>
+        <item>
+            <key> <string>title</string> </key>
+            <value> <string></string> </value>
+        </item>
+        <item>
+            <key> <string>transitions</string> </key>
+            <value>
+              <tuple>
+                <string>archive</string>
+                <string>archive_action</string>
+              </tuple>
+            </value>
+        </item>
+        <item>
+            <key> <string>type_list</string> </key>
+            <value>
+              <tuple/>
             </value>
         </item>
       </dictionary>
@@ -36,9 +59,11 @@
                         <string>Assignee</string>
                         <string>Assignor</string>
                         <string>Associate</string>
-                        <string>Auditor</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
+                        <string>Reviewer</string>
                       </list>
                     </value>
                 </item>
@@ -48,9 +73,11 @@
                       <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
-                        <string>Associate</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
+                        <string>Reviewer</string>
                       </list>
                     </value>
                 </item>
@@ -60,9 +87,11 @@
                       <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
-                        <string>Associate</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
+                        <string>Reviewer</string>
                       </list>
                     </value>
                 </item>
@@ -72,9 +101,11 @@
                       <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
-                        <string>Associate</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
+                        <string>Reviewer</string>
                       </list>
                     </value>
                 </item>
@@ -85,9 +116,11 @@
                         <string>Assignee</string>
                         <string>Assignor</string>
                         <string>Associate</string>
-                        <string>Auditor</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
+                        <string>Reviewer</string>
                       </list>
                     </value>
                 </item>

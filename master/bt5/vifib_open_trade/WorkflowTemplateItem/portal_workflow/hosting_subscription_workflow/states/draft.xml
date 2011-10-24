@@ -28,8 +28,8 @@
             <key> <string>transitions</string> </key>
             <value>
               <tuple>
-                <string>start</string>
-                <string>start_action</string>
+                <string>validate</string>
+                <string>validate_action</string>
               </tuple>
             </value>
         </item>
@@ -55,63 +55,73 @@
                 <item>
                     <key> <string>Access contents information</string> </key>
                     <value>
-                      <tuple>
+                      <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
                         <string>Associate</string>
-                        <string>Auditor</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
-                      </tuple>
+                        <string>Reviewer</string>
+                      </list>
                     </value>
                 </item>
                 <item>
                     <key> <string>Add portal content</string> </key>
                     <value>
-                      <tuple>
+                      <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
-                        <string>Associate</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
-                      </tuple>
+                        <string>Reviewer</string>
+                      </list>
                     </value>
                 </item>
                 <item>
                     <key> <string>Delete objects</string> </key>
                     <value>
-                      <tuple>
+                      <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
-                        <string>Associate</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
-                      </tuple>
+                        <string>Reviewer</string>
+                      </list>
                     </value>
                 </item>
                 <item>
                     <key> <string>Modify portal content</string> </key>
                     <value>
-                      <tuple>
+                      <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
-                        <string>Associate</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
-                      </tuple>
+                        <string>Reviewer</string>
+                      </list>
                     </value>
                 </item>
                 <item>
                     <key> <string>View</string> </key>
                     <value>
-                      <tuple>
+                      <list>
                         <string>Assignee</string>
                         <string>Assignor</string>
                         <string>Associate</string>
-                        <string>Auditor</string>
+                        <string>Author</string>
                         <string>Manager</string>
+                        <string>Member</string>
                         <string>Owner</string>
-                      </tuple>
+                        <string>Reviewer</string>
+                      </list>
                     </value>
                 </item>
               </dictionary>

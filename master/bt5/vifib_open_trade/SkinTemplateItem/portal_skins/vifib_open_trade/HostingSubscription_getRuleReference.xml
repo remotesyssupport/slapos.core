@@ -50,16 +50,16 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>state_change[\'object\'].Delivery_updateSimulation()\n
+            <value> <string>return \'default_subscription_item_rule\'\n
 </string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>state_change</string> </value>
+            <value> <string></string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>Delivery_updateSimulation</string> </value>
+            <value> <string>HostingSubscription_getRuleReference</string> </value>
         </item>
       </dictionary>
     </pickle>

@@ -124,7 +124,9 @@
         <item>
             <key> <string>test_method_id</string> </key>
             <value>
-              <tuple/>
+              <tuple>
+                <string>Rule_testFalse</string>
+              </tuple>
             </value>
         </item>
         <item>
