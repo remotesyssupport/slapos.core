@@ -39,6 +39,7 @@ REQUIRED_RULE_REFERENCE_LIST = [
   'default_invoice_transaction_rule',
   'default_invoicing_rule',
   'default_order_rule',
+  'default_subscription_item_rule',
 ]
 
 REQUIRED_NOTIFICATION_MESSAGE_REFERENCE_LIST = [
