@@ -325,18 +325,17 @@
 from DateTime import DateTime\n
 from Products.ZSQLCatalog.SQLCatalog import Query, ComplexQuery\n
 \n
-kw[\'query\'] = Query(portal_type=\'Simulation Movement\',parent_specialise_portal_type=\'Subscription Item Root Simulation Rule\')\n
+kw[\'query\'] = Query(portal_type=\'Simulation Movement\',\n
+                    parent_specialise_portal_type=\'Subscription Item Root Simulation Rule\',\n
+                    simulation_state=\'planned\')\n
 \n
 if src__==0:\n
   today = DateTime()\n
   candidate_list = [x.getObject() for x in context.portal_catalog(**kw)]\n
   movement_list = []\n
   for x in candidate_list:\n
-    try:\n
-      if x.getStartDate() <= today:\n
-        movement_list.append(x)\n
-    except:\n
-      raise Exception(x.getRelativeUrl())\n
+    if x.getStartDate() <= today:\n
+      movement_list.append(x)\n
   return movement_list\n
 else:\n
   return context.portal_catalog(src__=1, **kw)\n
