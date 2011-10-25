@@ -55,18 +55,20 @@
 In order to not transmit sensitive information the registration is done by looking the newest\n
 payzen related transaction for destination_section and doing its duplicate"""\n
 \n
+from DateTime import DateTime\n
 transaction = state_change[\'object\']\n
 portal = transaction.getPortalObject()\n
 integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
+sale_trade_condition = integration_tool.getSourceTrade()\n
 state_list = portal.getPortalCurrentInventoryStateList() + portal.getPortalTransitInventoryStateList()\n
 service = portal.portal_secure_payments.find()\n
-transaction_list = portal.portal_catalog(\n
+previous_transaction = portal.portal_catalog.getResultValue(\n
   destination_section_uid = transaction.getDestinationSectionUid(),\n
   portal_type=transaction.getPortalType(),\n
   simulation_state=state_list,\n
-  sort_on=((\'delivery.start_date\', \'DESC\')),\n
-  # optional: catalog based in-payzen transaction, for now we believe that one of last 10 will be payzen related\n
-  limit=10,\n
+  specialise_relative_url=sale_trade_condition,\n
+  sort_on=((\'delivery.start_date\', \'DESC\'),),\n
+  limit=1,\n
 )\n
 \n
 system_event_kw = {\n
@@ -76,18 +78,17 @@ system_event_kw = {\n
 }\n
 \n
 sent = portal.system_event_module.newContent(title=\'Sent\', **system_event_kw)\n
-if len(transaction_list) == 0:\n
+if previous_transaction is None:\n
   sent.confirm(comment=\'It was not possible to find any previous transaction\')\n
   return\n
 \n
 previous_id = None\n
-for previous_transaction in transaction_list:\n
-  possible_previous_id =  integration_tool.getMappingFromCategory(\'causality/%s\' % previous_transaction.getRelativeUrl())\n
-  if possible_previous_id != \'Causality/%s\' % transaction.getRelativeUrl():\n
-    previous_id = possible_previous_id.split(\'/\')[1]\n
+possible_previous_id =  integration_tool.getMappingFromCategory(\'causality/%s\' % previous_transaction.getRelativeUrl())\n
+if possible_previous_id != \'Causality/%s\' % transaction.getRelativeUrl():\n
+  previous_id = possible_previous_id.split(\'/\')[1]\n
 \n
 if previous_id is None:\n
-  sent.confirm(comment=\'It was not possible to find any previous Payzen related transaction\')\n
+  sent.confirm(comment=\'Transaction %s had not defined payzen integration\' % previous_transaction.getRelativeUrl())\n
   return\n
 \n
 previous_date, previous_id = previous_id.split(\'_\')\n
