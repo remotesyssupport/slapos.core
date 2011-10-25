@@ -1,17 +1,10 @@
 <local_roles_item>
  <local_roles>
-  <role id='F-PRODUCTION_G-COMPANY'>
-   <item>Auditor</item>
-   <item>Author</item>
-  </role>
   <role id='F-SALE_G-COMPANY'>
    <item>Auditor</item>
    <item>Author</item>
   </role>
-  <role id='R-MEMBER'>
-   <item>Auditor</item>
-  </role>
-  <role id='admin'>
+  <role id='zope'>
    <item>Owner</item>
   </role>
  </local_roles>
