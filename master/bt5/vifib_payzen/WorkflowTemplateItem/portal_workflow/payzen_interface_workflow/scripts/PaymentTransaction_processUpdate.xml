@@ -97,6 +97,7 @@ if transaction_status in mark_transaction_id_list:\n
   storeWorkflowComment(transaction, \'Transaction status %s (%s) did not changed the document state\' % (transaction_status, transaction_status_description))\n
   system_event.confirm()\n
   system_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
+  transaction.activate().PaymentTransaction_processPostPayzenUpdateActivity()\n
 elif transaction_status in continue_transaction_id_list:\n
   # Check authAmount and authDevise and if match, start transaction\n
   auth_amount = int(data_kw[\'authAmount\'])\n
@@ -109,15 +110,7 @@ elif transaction_status in continue_transaction_id_list:\n
   if transaction_devise != auth_devise:\n
     system_event.confirm(comment=\'Received devise (%r) does not match stored on transaction (%r)\'% (auth_devise, transaction_devise))\n
     return\n
-  workflow_tool = portal.portal_workflow\n
-  if workflow_tool.isTransitionPossible(transaction, \'start_action\'):\n
-    try:\n
-      workflow_tool.doActionFor(transaction, \'start_action\', comment=\'Started transaction because of received status %s (%s)\' % (transaction_status, transaction_status_description))\n
-    except ValidationFailed, e:\n
-      system_event.confirm(comment=\'It was not possible to start, validation failed with: %r\' % e)\n
-  else:\n
-    system_event.confirm(comment=\'start_action is not available on transaction.\')\n
-    return\n
+  transaction.activate().PaymentTransaction_processPostPayzenUpdateActivity()\n
   system_event.confirm()\n
   system_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
 else:\n
