@@ -92,7 +92,7 @@ if previous_id is None:\n
   return\n
 \n
 previous_date, previous_id = previous_id.split(\'_\')\n
-now_utc = DateTime().toZone(\'UTC\')\n
+now_utc = DateTime().toZone(\'UTC\').asdatetime()\n
 today = now_utc.strftime(\'%Y%m%d\')\n
 transaction_id = str(portal.portal_ids.generateNewId(\n
     id_group=\'%s_%s\' % (service.getRelativeUrl(), today),\n
@@ -118,9 +118,9 @@ payzen_dict = {}\n
 payzen_dict.update(\n
   devise=integration_site.getMappingFromCategory(\'resource/currency_module/%s\' % transaction.getResourceReference()).split(\'/\')[-1],\n
   amount=str(int(round((transaction.PaymentTransaction_getTotalPayablePrice() * 100), 0))),\n
-  presentationDate=now_utc,\n
+  presentationDate=transaction.getStartDate().toZone(\'UTC\').asdatetime(),\n
   newTransactionId=transaction_id,\n
-  transmissionDate=DateTime(previous_date),\n
+  transmissionDate=DateTime(previous_date).toZone(\'UTC\').asdatetime(),\n
   transactionId=previous_id\n
 )\n
 \n
