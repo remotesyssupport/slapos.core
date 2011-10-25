@@ -53,7 +53,14 @@
             <value> <string>from DateTime import DateTime\n
 portal = context.getPortalObject()\n
 service = portal.portal_secure_payments.find()\n
-integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
+integration_site = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
+system_event_kw = {\n
+  \'portal_type\': \'Soap Event\',\n
+  \'source_value\': service,\n
+  \'destination_value\': context,\n
+}\n
+sent = portal.system_event_module.newContent(title=\'User navigation script\', **system_event_kw)\n
+\n
 now_utc = DateTime().toZone(\'UTC\').asdatetime()\n
 today = now_utc.strftime(\'%Y%m%d\')\n
 transaction_id = str(portal.portal_ids.generateNewId(\n
@@ -61,18 +68,21 @@ transaction_id = str(portal.portal_ids.generateNewId(\n
     id_generator=\'uid\')).zfill(6)\n
 \n
 mapping_id = \'%s_%s\' % (today, transaction_id)\n
-assert integration_tool.getMappingFromCategory(\'causality/%s\' % context.getRelativeUrl()) == \'Causality/%s\' % context.getRelativeUrl()\n
+if not integration_site.getMappingFromCategory(\'causality/%s\' % context.getRelativeUrl()) == \'Causality/%s\' % context.getRelativeUrl():\n
+  sent.confirm(comment=\'Transaction already mapped in integration tool.\')\n
+  return \'There was system issue\'\n
 try:\n
-  integration_tool.getCategoryFromMapping(\'Causality/%s\' % mapping_id, create_mapping_line=True, create_mapping=True)\n
+  integration_site.getCategoryFromMapping(\'Causality/%s\' % mapping_id, create_mapping_line=True, create_mapping=True)\n
 except ValueError:\n
-  mapping = integration_tool.Causality[mapping_id]\n
+  mapping = integration_site.Causality[mapping_id]\n
   mapping.setDestinationReference(\'causality/%s\' % context.getRelativeUrl())\n
 else:\n
-  raise ValueError(\'Key %s already found!\' % id)\n
+  sent.confirm(comment=\'Key %s already found!\' % mapping_id)\n
+  return \'There was system issue\'\n
 \n
 payzen_dict = {}\n
 payzen_dict.update(\n
-  vads_currency=integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % context.getResourceReference()).split(\'/\')[-1],\n
+  vads_currency=integration_site.getMappingFromCategory(\'resource/currency_module/%s\' % context.getResourceReference()).split(\'/\')[-1],\n
   vads_amount=str(int(round((context.PaymentTransaction_getTotalPayablePrice() * 100), 0))),\n
   vads_trans_date=now_utc.strftime(\'%Y%m%d%H%M%S\'),\n
   vads_trans_id=transaction_id,\n
