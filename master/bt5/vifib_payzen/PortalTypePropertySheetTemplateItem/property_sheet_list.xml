@@ -1,5 +1,5 @@
 <property_sheet_list>
- <portal_type id="Soap Event">
+ <portal_type id="Payzen Event">
   <item>TextDocument</item>
  </portal_type>
 </property_sheet_list>

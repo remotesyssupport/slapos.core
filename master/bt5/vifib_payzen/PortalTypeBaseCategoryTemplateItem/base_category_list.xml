@@ -1,5 +1,5 @@
 <base_category_list>
- <portal_type id="Soap Event">
+ <portal_type id="Payzen Event">
   <item>destination</item>
   <item>source</item>
  </portal_type>
