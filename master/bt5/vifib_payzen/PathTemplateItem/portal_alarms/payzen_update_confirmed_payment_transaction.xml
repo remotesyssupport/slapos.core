@@ -12,7 +12,9 @@
         </item>
         <item>
             <key> <string>description</string> </key>
-            <value> <string>Automatically confirm order Sale Order generated from Hosting web site (for demo)</string> </value>
+            <value>
+              <none/>
+            </value>
         </item>
         <item>
             <key> <string>enabled</string> </key>
