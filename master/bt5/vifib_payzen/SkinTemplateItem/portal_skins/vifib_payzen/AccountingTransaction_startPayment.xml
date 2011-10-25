@@ -50,7 +50,8 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>from DateTime import DateTime\n
+            <value> <string># TODO: Return configured web page in case of system issues.\n
+from DateTime import DateTime\n
 portal = context.getPortalObject()\n
 service = portal.portal_secure_payments.find()\n
 integration_site = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
@@ -80,9 +81,19 @@ else:\n
   system_event.confirm(comment=\'Key %s already found!\' % mapping_id)\n
   return \'There was system issue\'\n
 \n
-context.setStartDate(now_utc)\n
+try:\n
+  context.setStartDate(now_utc)\n
+except:\n
+  system_event.confirm(comment=\'It was impossible to modify start date\')\n
+  return \'There was system issue\'\n
+\n
 portal.portal_workflow.doActionFor(context, \'edit_action\', comment=\'Start date set as payment is being registered\')\n
-portal.portal_workflow.doActionFor(context, \'confirm_action\', comment=\'Confirmed as payment is being registered\')\n
+try:\n
+  portal.portal_workflow.doActionFor(context, \'confirm_action\', comment=\'Confirmed as payment is being registered\')\n
+except:\n
+  system_event.confirm(comment=\'It was impossible to confirm the transaction\')\n
+  return \'There was system issue\'\n
+\n
 payzen_dict = {}\n
 payzen_dict.update(\n
   vads_currency=integration_site.getMappingFromCategory(\'resource/currency_module/%s\' % context.getResourceReference()).split(\'/\')[-1],\n
