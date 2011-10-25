@@ -329,12 +329,14 @@ kw[\'query\'] = Query(portal_type=\'Simulation Movement\',\n
                     parent_specialise_portal_type=\'Subscription Item Root Simulation Rule\',\n
                     simulation_state=\'planned\')\n
 \n
+if now is None:\n
+  now = DateTime()\n
+\n
 if src__==0:\n
-  today = DateTime()\n
   candidate_list = [x.getObject() for x in context.portal_catalog(**kw)]\n
   movement_list = []\n
   for x in candidate_list:\n
-    if x.getStartDate() <= today:\n
+    if x.getStartDate() <= now:\n
       movement_list.append(x)\n
   return movement_list\n
 else:\n
@@ -345,7 +347,7 @@ else:\n
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>src__=0, **kw</string> </value>
+            <value> <string>src__=0, now=None, **kw</string> </value>
         </item>
         <item>
             <key> <string>_proxy_roles</string> </key>
