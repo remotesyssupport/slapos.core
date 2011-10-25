@@ -11,6 +11,276 @@
             <value> <int>3</int> </value>
         </item>
         <item>
+            <key> <string>_Access_contents_information_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Change_Python_Scripts_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Change_bindings_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Change_cache_settings_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Change_permissions_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Change_proxy_roles_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Copy_or_Move_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Delete_objects_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Manage_WebDAV_Locks_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Manage_properties_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Take_ownership_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Undo_changes_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_View_History_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_View_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_View_management_screens_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_WebDAV_Lock_items_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_WebDAV_Unlock_items_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
+            <key> <string>_WebDAV_access_Permission</string> </key>
+            <value>
+              <list>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Authenticated</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Member</string>
+                <string>Owner</string>
+              </list>
+            </value>
+        </item>
+        <item>
             <key> <string>_bind_names</string> </key>
             <value>
               <object>
@@ -50,20 +320,29 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>from Products.ZSQLCatalog.SQLCatalog import Query, ComplexQuery\n
+            <value> <string encoding="cdata"><![CDATA[
+
+from DateTime import DateTime\n
+from Products.ZSQLCatalog.SQLCatalog import Query, ComplexQuery\n
 \n
 kw[\'query\'] = Query(portal_type=\'Simulation Movement\',parent_specialise_portal_type=\'Subscription Item Root Simulation Rule\')\n
 \n
-#kw.update(context.portal_catalog.buildSQLQuery(**kw))\n
-#from Products.ERP5Type.Log import log\n
-#log(\'SubscriptionItem_selectMovement\', \'SQL\\n%s\' % context.Order_zSelectMovement(src__=1, **kw))\n
-\n
 if src__==0:\n
-  movement_list = [x.getObject() for x in context.portal_catalog(**kw)]\n
+  today = DateTime()\n
+  candidate_list = [x.getObject() for x in context.portal_catalog(**kw)]\n
+  movement_list = []\n
+  for x in candidate_list:\n
+    try:\n
+      if x.getStartDate() <= today:\n
+        movement_list.append(x)\n
+    except:\n
+      raise Exception(x.getRelativeUrl())\n
   return movement_list\n
 else:\n
   return context.portal_catalog(src__=1, **kw)\n
-</string> </value>
+
+
+]]></string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
