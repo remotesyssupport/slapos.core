@@ -5,6 +5,10 @@
  </chain>
  <chain>
   <type>Payzen Event</type>
-  <workflow>edit_workflow, system_event_workflow</workflow>
+  <workflow>edit_workflow, payzen_interface_workflow, system_event_workflow</workflow>
+ </chain>
+ <chain>
+  <type>Payzen Event Message</type>
+  <workflow>edit_workflow</workflow>
  </chain>
 </workflow_chain>

@@ -74,15 +74,15 @@
                 <item>
                     <key> <string>bottom</string> </key>
                     <value>
-                      <list>
-                        <string>my_listbox</string>
-                      </list>
+                      <list/>
                     </value>
                 </item>
                 <item>
                     <key> <string>center</string> </key>
                     <value>
-                      <list/>
+                      <list>
+                        <string>my_text_content</string>
+                      </list>
                     </value>
                 </item>
                 <item>
@@ -96,8 +96,6 @@
                     <value>
                       <list>
                         <string>my_title</string>
-                        <string>my_source_title</string>
-                        <string>my_destination_title</string>
                       </list>
                     </value>
                 </item>
@@ -107,8 +105,6 @@
                       <list>
                         <string>my_creation_date</string>
                         <string>my_predecessor_title</string>
-                        <string>my_translated_validation_state_title</string>
-                        <string>my_translated_payzen_state_title</string>
                       </list>
                     </value>
                 </item>
@@ -117,7 +113,7 @@
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>PayzenEvent_view</string> </value>
+            <value> <string>PayzenEventMessage_view</string> </value>
         </item>
         <item>
             <key> <string>method</string> </key>
@@ -141,7 +137,7 @@
         </item>
         <item>
             <key> <string>title</string> </key>
-            <value> <string>Payzen Event</string> </value>
+            <value> <string>Payzen Event Message</string> </value>
         </item>
         <item>
             <key> <string>unicode_mode</string> </key>

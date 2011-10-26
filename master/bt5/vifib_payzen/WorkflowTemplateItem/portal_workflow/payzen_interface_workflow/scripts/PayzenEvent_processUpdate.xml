@@ -55,15 +55,14 @@
   workflow_tool = portal.portal_workflow\n
   workflow_tool.doActionFor(ctx, \'edit_action\', comment=comment)\n
 \n
-transaction = state_change[\'object\']\n
+payzen_event = state_change[\'object\']\n
+transaction = payzen_event.getDestinationValue()\n
 portal = transaction.getPortalObject()\n
-\n
-system_event = portal.restrictedTraverse(system_event)\n
 \n
 from Products.DCWorkflow.DCWorkflow import ValidationFailed\n
 if signature is not True:\n
   # signature is wrong, bye bye\n
-  system_event.confirm(comment=\'Signature does not match\')\n
+  payzen_event.confirm(comment=\'Signature does not match\')\n
   return\n
 \n
 transaction_code_mapping = {\n
@@ -86,7 +85,7 @@ transaction_code_mapping = {\n
 transaction_status = data_kw[\'transactionStatus\']\n
 transaction_status_description = transaction_code_mapping.get(transaction_status, None)\n
 if transaction_status_description is None:\n
-  system_event.confirm(comment=\'Unknown transactionStatus %r\' % transaction_status)\n
+  payzen_event.confirm(comment=\'Unknown transactionStatus %r\' % transaction_status)\n
   return\n
 integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
 mark_transaction_id_list = [\'0\', \'1\', \'3\', \'4\', \'5\', \'10\', \'11\', \'12\']\n
@@ -95,36 +94,35 @@ continue_transaction_id_list = [\'6\']\n
 if transaction_status in mark_transaction_id_list:\n
   # Mark on payment transaction history log that transaction was not processed yet\n
   storeWorkflowComment(transaction, \'Transaction status %s (%s) did not changed the document state\' % (transaction_status, transaction_status_description))\n
-  system_event.confirm()\n
-  system_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
-  transaction.activate().PaymentTransaction_processPostPayzenUpdateActivity()\n
+  payzen_event.confirm()\n
+  payzen_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
 elif transaction_status in continue_transaction_id_list:\n
   # Check authAmount and authDevise and if match, start transaction\n
   auth_amount = int(data_kw[\'authAmount\'])\n
   auth_devise = data_kw[\'authDevise\']\n
   transaction_amount = int(round((transaction.PaymentTransaction_getTotalPayablePrice() * 100), 2))\n
   if transaction_amount != auth_amount:\n
-    system_event.confirm(comment=\'Received amount (%r) does not match stored on transaction (%r)\'% (auth_amount, transaction_amount))\n
+    payzen_event.confirm(comment=\'Received amount (%r) does not match stored on transaction (%r)\'% (auth_amount, transaction_amount))\n
     return\n
   transaction_devise = integration_tool.getMappingFromCategory(\'resource/currency_module/%s\' % transaction.getResourceReference()).split(\'/\')[-1]\n
   if transaction_devise != auth_devise:\n
-    system_event.confirm(comment=\'Received devise (%r) does not match stored on transaction (%r)\'% (auth_devise, transaction_devise))\n
+    payzen_event.confirm(comment=\'Received devise (%r) does not match stored on transaction (%r)\'% (auth_devise, transaction_devise))\n
     return\n
-  transaction.activate().PaymentTransaction_processPostPayzenUpdateActivity()\n
-  system_event.confirm()\n
-  system_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
+  transaction.activate().PaymentTranscation_start()\n
+  payzen_event.confirm()\n
+  payzen_event.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
 else:\n
-  system_event.confirm(\'Transaction status %r (%r) is not supported\' % (transcation_status, transaction_descrption))\n
+  payzen_event.confirm(\'Transaction status %r (%r) is not supported\' % (transcation_status, transaction_descrption))\n
   return\n
 </string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>state_change, data_kw, signature, system_event</string> </value>
+            <value> <string>state_change, data_kw, signature</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>PaymentTransaction_processUpdate</string> </value>
+            <value> <string>PayzenEvent_processUpdate</string> </value>
         </item>
       </dictionary>
     </pickle>

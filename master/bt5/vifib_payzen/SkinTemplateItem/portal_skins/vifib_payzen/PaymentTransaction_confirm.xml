@@ -50,19 +50,7 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>portal = context.getPortalObject()\n
-integration_site = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
-sale_trade_condition = integration_site.getSourceTrade()\n
-service = portal.portal_secure_payments.find()\n
-for payment_transaction in portal.portal_catalog(\n
-      portal_type="Payment Transaction", \n
-      specialise_relative_url=sale_trade_condition,\n
-      simulation_state="confirmed",\n
-      ):\n
-  if payment_transaction.getSimulationState() == \'confirmed\':\n
-    payzen_event = portal.system_event_module.newContent(portal_type=\'Payzen Event\',\n
-      source_value=service, destination_value=payment_transaction)\n
-    payzen_event.updateStatus()\n
+            <value> <string>context.getPortalObject().portal_workflow.doActionFor(context, \'confirm_action\', comment=\'Transaction being registered in Payzen\')\n
 </string> </value>
         </item>
         <item>
@@ -71,7 +59,7 @@ for payment_transaction in portal.portal_catalog(\n
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>Alarm_updatePayzenConfirmedPaymentTransaction</string> </value>
+            <value> <string>PaymentTransaction_confirm</string> </value>
         </item>
       </dictionary>
     </pickle>

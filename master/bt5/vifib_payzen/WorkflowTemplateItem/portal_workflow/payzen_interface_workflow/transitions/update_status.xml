@@ -24,7 +24,7 @@
         </item>
         <item>
             <key> <string>after_script_name</string> </key>
-            <value> <string>PaymentTransaction_updatePayzenStatus</string> </value>
+            <value> <string>PayzenEvent_updateStatus</string> </value>
         </item>
         <item>
             <key> <string>description</string> </key>
@@ -38,7 +38,7 @@
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>update_payzen_status</string> </value>
+            <value> <string>update_status</string> </value>
         </item>
         <item>
             <key> <string>new_state_id</string> </key>

@@ -10,16 +10,15 @@
             <key> <string>delegated_list</string> </key>
             <value>
               <list>
-                <string>base_category</string>
-                <string>catalog_index</string>
-                <string>portal_type</string>
+                <string>columns</string>
+                <string>portal_types</string>
                 <string>title</string>
               </list>
             </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>my_destination_title</string> </value>
+            <value> <string>my_listbox</string> </value>
         </item>
         <item>
             <key> <string>message_values</string> </key>
@@ -37,15 +36,15 @@
             <value>
               <dictionary>
                 <item>
-                    <key> <string>extra_context</string> </key>
-                    <value> <string></string> </value>
-                </item>
-                <item>
                     <key> <string>field_id</string> </key>
                     <value> <string></string> </value>
                 </item>
                 <item>
                     <key> <string>form_id</string> </key>
+                    <value> <string></string> </value>
+                </item>
+                <item>
+                    <key> <string>target</string> </key>
                     <value> <string></string> </value>
                 </item>
               </dictionary>
@@ -56,15 +55,15 @@
             <value>
               <dictionary>
                 <item>
-                    <key> <string>extra_context</string> </key>
-                    <value> <string></string> </value>
-                </item>
-                <item>
                     <key> <string>field_id</string> </key>
                     <value> <string></string> </value>
                 </item>
                 <item>
                     <key> <string>form_id</string> </key>
+                    <value> <string></string> </value>
+                </item>
+                <item>
+                    <key> <string>target</string> </key>
                     <value> <string></string> </value>
                 </item>
               </dictionary>
@@ -75,41 +74,46 @@
             <value>
               <dictionary>
                 <item>
-                    <key> <string>base_category</string> </key>
-                    <value> <string>destination</string> </value>
-                </item>
-                <item>
-                    <key> <string>catalog_index</string> </key>
-                    <value> <string>title</string> </value>
-                </item>
-                <item>
-                    <key> <string>extra_context</string> </key>
+                    <key> <string>columns</string> </key>
                     <value>
-                      <list/>
+                      <list>
+                        <tuple>
+                          <string>title</string>
+                          <string>Title</string>
+                        </tuple>
+                        <tuple>
+                          <string>creation_date</string>
+                          <string>Creation Date</string>
+                        </tuple>
+                      </list>
                     </value>
                 </item>
                 <item>
                     <key> <string>field_id</string> </key>
-                    <value> <string>my_relation_field</string> </value>
+                    <value> <string>my_view_mode_listbox</string> </value>
                 </item>
                 <item>
                     <key> <string>form_id</string> </key>
                     <value> <string>Base_viewFieldLibrary</string> </value>
                 </item>
                 <item>
-                    <key> <string>portal_type</string> </key>
+                    <key> <string>portal_types</string> </key>
                     <value>
                       <list>
                         <tuple>
-                          <string>Payment Transaction</string>
-                          <string>Payment Transaction</string>
+                          <string>Payzen Event Message</string>
+                          <string>Payzen Event Message</string>
                         </tuple>
                       </list>
                     </value>
                 </item>
                 <item>
+                    <key> <string>target</string> </key>
+                    <value> <string>Click to edit the target</string> </value>
+                </item>
+                <item>
                     <key> <string>title</string> </key>
-                    <value> <string>Payment Transaction</string> </value>
+                    <value> <string>Payzen Event Messages</string> </value>
                 </item>
               </dictionary>
             </value>

@@ -81,7 +81,7 @@ else:\n
   system_event.confirm(comment=\'Key %s already found!\' % mapping_id)\n
   return \'There was system issue\'\n
 \n
-context.activate().PaymentTransaction_processPostStartPaymentActivity(date=now_utc)\n
+context.activate().PaymentTransaction_setStartDateConfirm(date=now_utc)\n
 \n
 payzen_dict = {}\n
 payzen_dict.update(\n

@@ -50,41 +50,18 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>payment_transaction = state_change[\'object\']\n
-portal = payment_transaction.getPortalObject()\n
-service = portal.portal_secure_payments.find()\n
-integration_tool = portal.restrictedTraverse(portal.portal_preferences.getPreferredPayzenIntegrationSite())\n
-\n
-system_event_kw = {\n
-  \'portal_type\': \'Payzen Event\',\n
-  \'source_value\': service,\n
-  \'destination_value\': payment_transaction,\n
-}\n
-sent = portal.system_event_module.newContent(title=\'Update Sent SOAP\', **system_event_kw)\n
-\n
-transaction_id = integration_tool.getMappingFromCategory(\'causality/%s\' % payment_transaction.getRelativeUrl())\n
-if transaction_id == \'Causality/%s\' % payment_transaction.getRelativeUrl():\n
-  sent.confirm(comment=\'Transaction not registered in payzen integration tool\')\n
-  return\n
-transaction_id = transaction_id.split(\'/\')[1]\n
-transmissionDate, transactionId = transaction_id.split(\'_\')\n
-\n
-data_kw, signature, sent_text, received_text = service.soap_getInfo(DateTime(transmissionDate).toZone(\'UTC\').asdatetime(), transactionId)\n
-sent.edit(text_content=sent_text)\n
-sent.confirm()\n
-sent.acknowledge(comment=\'Automatic acknowledge as result of correct communication\')\n
-received = portal.system_event_module.newContent(title=\'Update Received SOAP\', text_content=received_text, predecessor_value=sent, **system_event_kw)\n
-\n
-context.PaymentTransaction_processUpdate(state_change, data_kw, signature, system_event=received.getRelativeUrl())\n
+            <value> <string>context.setStartDate(date)\n
+context.getPortalObject().portal_workflow.doActionFor(context, \'confirm_action\', comment=\'Transaction being registered in Payzen\')\n
+context.getPortalObject().portal_workflow.doActionFor(context, \'edit_action\', comment=\'Date set as transaction being registered in Payzen\')\n
 </string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>state_change</string> </value>
+            <value> <string>date</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>PaymentTransaction_updatePayzenStatus</string> </value>
+            <value> <string>PaymentTransaction_setStartDateConfirm</string> </value>
         </item>
       </dictionary>
     </pickle>

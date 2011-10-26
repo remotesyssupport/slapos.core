@@ -22,8 +22,11 @@
             <key> <string>transitions</string> </key>
             <value>
               <tuple>
-                <string>register_in_payzen</string>
-                <string>update_payzen_status</string>
+                <string>register_payzen</string>
+                <string>report_error</string>
+                <string>report_success</string>
+                <string>start_payment</string>
+                <string>update_status</string>
               </tuple>
             </value>
         </item>
