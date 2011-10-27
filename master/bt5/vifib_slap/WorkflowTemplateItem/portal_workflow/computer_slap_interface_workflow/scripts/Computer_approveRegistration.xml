@@ -69,12 +69,14 @@ person = portal.ERP5Site_getAuthenticatedMemberPersonValue()\n
 sale_trade_condition_module = portal.getDefaultModule(trade_condition_portal_type)\n
 sale_trade_condition = sale_trade_condition_module.newContent(\n
   portal_type=trade_condition_portal_type,\n
-  destination_section=person,\n
-  source_section=person,\n
+  destination_section_value=person,\n
+  source_section_value=person,\n
+  title="%s (%s) supply condition" % (computer.getTitle(), computer.getReference()),\n
 )\n
 sale_trade_condition.newContent(\n
   portal_type="Sale Supply Line",\n
   aggregate_value=computer,\n
+  resource=portal.portal_preferences.getPreferredInstanceSetupResource(),\n
 )\n
 sale_trade_condition.validate()\n
 </string> </value>
