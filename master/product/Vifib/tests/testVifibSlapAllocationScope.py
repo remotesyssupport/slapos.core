@@ -65,7 +65,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
   def stepCheckComputerAllocationScopeEmpty(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
-    self.assertEqual(computer.getAllocationScope(), '')
+    self.assertEqual(computer.getAllocationScope(), None)
 
   def stepCheckComputerAllocationScopeClose(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
@@ -113,6 +113,8 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 <instance>
 <parameter id="computer_guid">%s</parameter>
 </instance>""" % sequence['computer_reference']
+    sequence['requested_filter_dict'] = dict(
+      computer_guid=sequence['computer_reference'])
 
   def test_allocation_scope_open_personal(self):
     """Check that computer is open/personal it is only available
@@ -321,7 +323,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       SlapLogout
 
       LoginDefaultUser
-      CheckComputerAllocationEmpty
+      CheckComputerAllocationScopeEmpty
       CheckComputerTradeConditionSujectListEmpty
       Logout
     """ + self.prepare_published_software_release + \
@@ -341,6 +343,79 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     """
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
+
+  prepare_open_public_computer = """
+      LoginTestVifibCustomer
+      CustomerRegisterNewComputer
+      Tic
+      Logout
+
+      LoginDefaultUser
+      SetComputerCoordinatesFromComputerTitle
+      Logout
+
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeOpenPublic
+      Tic
+      Logout
+      SetSequenceSlaXmlCurrentComputer
+
+      SlapLoginCurrentComputer
+      FormatComputer
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenPublic
+      CheckComputerTradeConditionSujectListEmpty
+      Logout
+    """ + TestVifibSlapWebServiceMixin.prepare_published_software_release \
+      + request_and_install_software
+
+  def test_allocation_scope_public_software_instance_request(self):
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string =  self.prepare_open_public_computer + """
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # now this computer patrition request new one
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckSoftwareInstanceAndRelatedComputerPartition
+      CheckRequestedSoftwareInstanceAndRelatedComputerPartition
+      Logout
+
+      SlapLoginCurrentSoftwareInstance
+      CheckRequestedComputerPartitionCleanParameterList
+      SlapLogout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
+
+  def test_allocation_scope_private_software_instance_request(self):
+    raise NotImplementedError
+
+  def test_allocation_scope_closed_software_instance_request(self):
+    raise NotImplementedError
 
 def test_suite():
   suite = unittest.TestSuite()
