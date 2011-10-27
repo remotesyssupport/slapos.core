@@ -35,6 +35,7 @@
             <value>
               <list>
                 <string>Base_updateAllLocalRoles</string>
+                <string>SaleTradeCondition_updateComputerLocalRoles</string>
               </list>
             </value>
         </item>
