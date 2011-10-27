@@ -59,7 +59,7 @@ query_kw = {\n
 }\n
 if software_instance.getPortalType() == "Slave Instance":\n
   query_kw[\'free_for_request\'] = 0\n
-  # XXX TODO Filter partition by software_type\n
+  query_kw[\'software_type\'] = software_instance.getSourceReference()\n
 elif software_instance.getPortalType() == "Software Instance":\n
   query_kw[\'free_for_request\'] = 1\n
 else:\n
