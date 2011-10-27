@@ -50,10 +50,23 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>computer = context.getParentValue()\n
-if computer.getPortalType() != \'Computer\':\n
-  computer = computer.getParentValue()\n
-return computer.Computer_getSoftwareReleaseUrlStringList([\'stopped\'])\n
+            <value> <string>slap_state = context.getSlapState()\n
+\n
+if slap_state == \'free\':\n
+  computer = context.getParentValue()\n
+  return computer.Computer_getSoftwareReleaseUrlStringList([\'stopped\'])\n
+\n
+elif slap_state == \'busy\':\n
+  try:\n
+    delivery_line = context.Item_getInstancePackingListLine()\n
+  except ValueError:\n
+    pass\n
+  else:\n
+    software_release = delivery_line.getAggregateValue(portal_type=\'Software Release\')\n
+    return [software_release.getUrlString()]\n
+\n
+else:\n
+  return []\n
 </string> </value>
         </item>
         <item>
