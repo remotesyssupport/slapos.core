@@ -90,7 +90,7 @@ class SubscriptionItemRootSimulationRule(RuleMixin):
         next_date = self.getNextPeriodicalDate(current_date)
         applied_rule.newContent(
             portal_type = 'Simulation Movement',
-            aggregate_value = self,
+            aggregate_value = subscription_item,
             resource = movement.getResource(),
             start_date = current_date,
             stop_date = next_date,
@@ -101,3 +101,4 @@ class SubscriptionItemRootSimulationRule(RuleMixin):
             price = movement.getPrice(),
             quantity = movement.getQuantity(),
             )
+        current_date = next_date
