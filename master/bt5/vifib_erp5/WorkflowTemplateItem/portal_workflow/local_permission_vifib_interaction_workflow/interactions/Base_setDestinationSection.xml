@@ -57,6 +57,9 @@
             <value>
               <list>
                 <string>_setDestinationSection.*</string>
+                <string>_setSourceSection.*</string>
+                <string>validate</string>
+                <string>invalidate</string>
               </list>
             </value>
         </item>
