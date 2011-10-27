@@ -23,6 +23,19 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       computer_reference=computer.getReference(),
     )
 
+  def stepComputerSetAllocationScopeClose(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    request = self.app.REQUEST
+    self.getPortal().portal_skins.changeSkin("Hosting")
+    request.set('portal_skin', "Hosting")
+
+    computer.Computer_updateAllocationScope(allocation_scope='close',
+      subject_list=[])
+
+    self.getPortal().portal_skins.changeSkin("View")
+    request.set('portal_skin', "View")
+
   def stepComputerSetAllocationScopeOpenPublic(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
@@ -35,6 +48,11 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
     self.getPortal().portal_skins.changeSkin("View")
     request.set('portal_skin', "View")
+
+  def stepCheckComputerAllocationScopeClose(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    self.assertEqual(computer.getAllocationScope(), 'close')
 
   def stepCheckComputerAllocationScopeOpenPersonal(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
@@ -216,7 +234,49 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
   def test_allocation_scope_close(self):
     """Check that computer is close it is not only available
     to anybody"""
-    raise NotImplementedError
+    sequence_list = SequenceList()
+    sequence_string = """
+      LoginTestVifibCustomer
+      CustomerRegisterNewComputer
+      Tic
+      Logout
+
+      LoginDefaultUser
+      SetComputerCoordinatesFromComputerTitle
+      Logout
+
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeClose
+      Tic
+      Logout
+      SetSequenceSlaXmlCurrentComputer
+
+      SlapLoginCurrentComputer
+      FormatComputer
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeClose
+      CheckComputerTradeConditionSujectListEmpty
+      Logout
+    """ + self.prepare_published_software_release + \
+      self.request_and_install_software + """
+      # request as owner
+      LoginTestVifibCustomer
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # fail to instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      CheckNoRelatedSalePackingListLineForSoftwareInstance
+      Logout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
 def test_suite():
   suite = unittest.TestSuite()
