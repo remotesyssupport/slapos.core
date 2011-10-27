@@ -649,6 +649,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       Tic
       SetSoftwareProductToSoftwareRelease
       PublishByActionSoftwareRelease
+      Tic
       Logout
   """
 
