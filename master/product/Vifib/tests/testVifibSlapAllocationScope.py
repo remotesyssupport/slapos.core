@@ -36,6 +36,19 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     self.getPortal().portal_skins.changeSkin("View")
     request.set('portal_skin', "View")
 
+  def stepComputerSetAllocationScopeOpenPersonal(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    request = self.app.REQUEST
+    self.getPortal().portal_skins.changeSkin("Hosting")
+    request.set('portal_skin', "Hosting")
+
+    computer.Computer_updateAllocationScope(allocation_scope='open/personal',
+      subject_list=[])
+
+    self.getPortal().portal_skins.changeSkin("View")
+    request.set('portal_skin', "View")
+
   def stepComputerSetAllocationScopeClose(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
@@ -551,17 +564,185 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
-  def test_allocation_scope_private_software_instance_request(self):
-    raise NotImplementedError
+  def test_allocation_scope_personal_software_instance_request(self):
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string =  self.prepare_open_public_computer + """
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # change allocation to personal
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeOpenPersonal
+      Tic
+      Logout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenPersonal
+      CheckComputerTradeConditionSubjectListEmpty
+      Logout
+
+      # now this computer patrition request new one
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartitionNotFoundResponse
+      SlapLogout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
   def test_allocation_scope_friend_software_instance_request(self):
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string =  self.prepare_open_public_computer + """
+      # request as friend
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for friend
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # request as someone else
+      LoginTestVifibCustomerA
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # change allocation to personal
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeOpenFriendTestVifibAdmin
+      Tic
+      Logout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenFriend
+      CheckComputerTradeConditionSubjectListTestVifibAdmin
+      Logout
+
+      # now this computer patrition request new one
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartitionNotFoundResponse
+      SlapLogout
+      
+      # now vifib_admin computer partition request new one and suceeds
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
     raise NotImplementedError
 
-  def test_allocation_scope_closed_software_instance_request(self):
-    raise NotImplementedError
+  def test_allocation_scope_close_software_instance_request(self):
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string =  self.prepare_open_public_computer + """
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # change allocation to close
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeClose
+      Tic
+      Logout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeClose
+      CheckComputerTradeConditionSubjectListEmpty
+      Logout
+
+      # now this computer patrition request new one
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartitionNotFoundResponse
+      SlapLogout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
   def test_allocation_scope_empty_software_instance_request(self):
-    raise NotImplementedError
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string =  self.prepare_open_public_computer + """
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # change allocation to empty
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeEmpty
+      Tic
+      Logout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeEmpty
+      CheckComputerTradeConditionSubjectListEmpty
+      Logout
+
+      # now this computer patrition request new one
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartitionNotFoundResponse
+      SlapLogout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
 def test_suite():
   suite = unittest.TestSuite()
