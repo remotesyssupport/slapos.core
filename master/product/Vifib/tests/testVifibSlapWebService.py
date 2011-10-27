@@ -374,6 +374,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       software_title=software_title,
       instance_xml=self.minimal_correct_xml,
       sla_xml=sequence.get('sla_xml'),
+      state=sequence.get('software_instance_state'),
       **kw)
     transaction.commit()
     self.tic()

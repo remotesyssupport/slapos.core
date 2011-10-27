@@ -744,10 +744,121 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
-  def test_stop_computer_partition_allocation_scope_close(self):
+  def stepSetSequenceSoftwareInstanceStateStopped(self, sequence, **kw):
+    sequence['software_instance_state'] = 'stopped'
+
+  def test_start_computer_partition_allocation_scope_close(self):
     """Check that it is possible to request stop of computer partition even
     if computer is close"""
-    raise NotImplementedError
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string = """
+      LoginTestVifibCustomer
+      CustomerRegisterNewComputer
+      Tic
+      Logout
+
+      LoginDefaultUser
+      SetComputerCoordinatesFromComputerTitle
+      Logout
+
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeOpenPublic
+      Tic
+      Logout
+
+      SetSequenceSlaXmlCurrentComputer
+      SetSequenceSoftwareInstanceStateStopped
+
+      SlapLoginCurrentComputer
+      FormatComputer
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenPublic
+      CheckComputerTradeConditionSubjectListEmpty
+      Logout
+    """ + self.prepare_published_software_release + \
+      self.request_and_install_software + """
+      # request as owner
+      LoginTestVifibCustomer
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # confirm instantiation
+      SlapLoginCurrentComputer
+      SoftwareInstanceAvailable
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      SetSelectedComputerPartition
+      CheckComputerPartitionInstanceSetupSalePackingListStopped
+      CheckComputerPartitionNoInstanceHostingSalePackingList
+      Logout
+
+      # close allocation scope of computer
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeClose
+      Tic
+      Logout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeClose
+      CheckComputerTradeConditionSubjectListEmpty
+      Logout
+
+      # request start and check that it worked
+      LoginTestVifibAdmin
+      RequestSoftwareInstanceStart
+      Tic
+      Logout
+
+      LoginDefaultUser
+      CheckComputerPartitionInstanceHostingSalePackingListConfirmed
+      Logout
+
+      SlapLoginCurrentComputer
+      SoftwareInstanceStarted
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerPartitionInstanceHostingSalePackingListStarted
+      Logout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
 def test_suite():
   suite = unittest.TestSuite()
