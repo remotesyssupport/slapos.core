@@ -23,14 +23,14 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       computer_reference=computer.getReference(),
     )
 
-  def stepComputerSetAllocationScopeOpenPersonal(self, sequence, **kw):
+  def stepComputerSetAllocationScopeOpenPublic(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
     request = self.app.REQUEST
     self.getPortal().portal_skins.changeSkin("Hosting")
     request.set('portal_skin', "Hosting")
 
-    computer.Computer_updateAllocationScope(allocation_scope='open/personal',
+    computer.Computer_updateAllocationScope(allocation_scope='open/public',
       subject_list=[])
 
     self.getPortal().portal_skins.changeSkin("View")
@@ -40,6 +40,11 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
     self.assertEqual(computer.getAllocationScope(), 'open/personal')
+
+  def stepCheckComputerAllocationScopeOpenPublic(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    self.assertEqual(computer.getAllocationScope(), 'open/public')
 
   def stepCheckComputerTradeConditionSujectListEmpty(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
@@ -124,7 +129,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       Tic
       Logout
 
-      # instantiate for owner
+      # fail to instantiate for someone else
       LoginDefaultUser
       ConfirmOrderedSaleOrderActiveSense
       Tic
@@ -142,7 +147,71 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
   def test_allocation_scope_open_public(self):
     """Check that computer is open/public it is only available
     to anybody"""
-    raise NotImplementedError
+    self.computer_partition_amount = 2
+    sequence_list = SequenceList()
+    sequence_string = """
+      LoginTestVifibCustomer
+      CustomerRegisterNewComputer
+      Tic
+      Logout
+
+      LoginDefaultUser
+      SetComputerCoordinatesFromComputerTitle
+      Logout
+
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeOpenPublic
+      Tic
+      Logout
+      SetSequenceSlaXmlCurrentComputer
+
+      SlapLoginCurrentComputer
+      FormatComputer
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenPublic
+      CheckComputerTradeConditionSujectListEmpty
+      Logout
+    """ + self.prepare_published_software_release + \
+      self.request_and_install_software + """
+      # request as owner
+      LoginTestVifibCustomer
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
   def test_allocation_scope_close(self):
     """Check that computer is close it is not only available
