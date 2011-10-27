@@ -77,6 +77,8 @@ class SubscriptionItemRootSimulationRule(RuleMixin):
     return DateTime(year, month, 1)
 
   def expand(self, applied_rule, **kw):
+    """
+    """
     subscription_item = applied_rule.getCausalityValue()
     open_order_movement_list = subscription_item.getAggregateRelatedValueList(
                                    portal_type = 'Open Sale Order Line')
