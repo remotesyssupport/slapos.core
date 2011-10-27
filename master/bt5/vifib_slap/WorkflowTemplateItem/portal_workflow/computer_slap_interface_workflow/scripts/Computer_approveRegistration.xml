@@ -51,6 +51,7 @@
         <item>
             <key> <string>_body</string> </key>
             <value> <string>computer = state_change[\'object\']\n
+computer.edit(allocation_scope=\'open/personal\')\n
 portal = computer.getPortalObject()\n
 \n
 internal_packing_list_url = context.portal_workflow.getInfoFor(\n
