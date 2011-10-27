@@ -60,6 +60,11 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       SlapLogout
   """
 
+  def stepSetSequenceSlaXmlCurrentComputer(self, sequence, **kw):
+    sequence['sla_xml'] = """<?xml version='1.0' encoding='utf-8'?>
+<instance>
+<parameter id="computer_guid">%s</parameter>
+</instance>""" % sequence['computer_reference']
   def test_allocation_scope_open_personal(self):
     """Check that computer is open/personal it is only available
     to owner"""
@@ -74,6 +79,8 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       LoginDefaultUser
       SetComputerCoordinatesFromComputerTitle
       Logout
+
+      SetSequenceSlaXmlCurrentComputer
 
       SlapLoginCurrentComputer
       FormatComputer
