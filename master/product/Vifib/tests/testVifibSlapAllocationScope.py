@@ -60,11 +60,19 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       SlapLogout
   """
 
+  def stepCheckNoRelatedSalePackingListLineForSoftwareInstance(self, sequence,
+    **kw):
+    software_instance = self.portal.portal_catalog.getResultValue(
+        uid=sequence['software_instance_uid'])
+    self.assertEqual(0, len(software_instance.getAggregateRelatedValueList(
+          portal_type=self.sale_packing_list_line_portal_type)))
+
   def stepSetSequenceSlaXmlCurrentComputer(self, sequence, **kw):
     sequence['sla_xml'] = """<?xml version='1.0' encoding='utf-8'?>
 <instance>
 <parameter id="computer_guid">%s</parameter>
 </instance>""" % sequence['computer_reference']
+
   def test_allocation_scope_open_personal(self):
     """Check that computer is open/personal it is only available
     to owner"""
@@ -109,10 +117,22 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       LoginDefaultUser
       CheckComputerPartitionInstanceSetupSalePackingListConfirmed
       Logout
+
+      # request as someone else
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      CheckNoRelatedSalePackingListLineForSoftwareInstance
+      Logout
     """
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
-    raise NotImplementedError
 
   def test_allocation_scope_open_friend(self):
     """Check that computer is open/friend it is only available
