@@ -1,4 +1,6 @@
 business_process_module/erp5_default_business_process/delivery_path
+business_process_module/vifib_default_business_process
+business_process_module/vifib_default_business_process/**
 computer_module/test_computer
 computer_module/test_computer/**
 open_sale_order_module/1
@@ -7,6 +9,10 @@ organisation_module/vifib_client_A
 organisation_module/vifib_client_A/**
 organisation_module/vifib_internet
 organisation_module/vifib_internet/**
+portal_categories/trade_phase/vifib
+portal_categories/trade_phase/vifib/**
+portal_categories/trade_state/vifib
+portal_categories/trade_state/vifib/**
 portal_deliveries/subscription_item_packing_list_builder
 portal_deliveries/subscription_item_packing_list_builder/**
 portal_rules/default_subscription_item_rule
