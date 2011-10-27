@@ -99,7 +99,7 @@ else:\n
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>ComputerType_getSecurityCategorySecurityFromSaleTradeCondition</string> </value>
+            <value> <string>ComputerType_getSecurityCategoryFromSaleTradeCondition</string> </value>
         </item>
       </dictionary>
     </pickle>
