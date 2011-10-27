@@ -58,6 +58,8 @@ computer.edit(\n
 )\n
 \n
 sale_supply_line = computer.Computer_getRelatedSaleSupplyLine()\n
+if len(subject_list) == 0:\n
+  subject_list = [\'\']\n
 sale_supply_line.edit(\n
   subject_list=subject_list)\n
 \n
