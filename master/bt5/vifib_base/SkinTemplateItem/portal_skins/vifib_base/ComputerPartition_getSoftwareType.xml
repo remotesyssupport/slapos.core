@@ -57,7 +57,7 @@ except ValueError:\n
 else:\n
   software_instance = delivery_line.getAggregateValue(portal_type=\'Software Instance\')\n
   if software_instance is not None:\n
-    return software_instance.getTitle()\n
+    return software_instance.getSourceReference()\n
 return ""\n
 </string> </value>
         </item>
