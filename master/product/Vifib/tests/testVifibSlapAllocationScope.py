@@ -744,6 +744,11 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
+  def test_stop_computer_partition_allocation_scope_close(self):
+    """Check that it is possible to request stop of computer partition even
+    if computer is close"""
+    raise NotImplementedError
+
 def test_suite():
   suite = unittest.TestSuite()
   suite.addTest(unittest.makeSuite(TestVifibSlapAllocationScope))
