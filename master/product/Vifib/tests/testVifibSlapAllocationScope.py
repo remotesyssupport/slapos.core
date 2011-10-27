@@ -296,7 +296,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
-  def test_allocation_scope_mpty(self):
+  def test_allocation_scope_empty(self):
     """Check that computer's allocation scope is not set it is unavailable"""
     sequence_list = SequenceList()
     sequence_string = """
