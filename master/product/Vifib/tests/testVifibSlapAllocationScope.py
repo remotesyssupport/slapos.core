@@ -187,6 +187,24 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       Tic
       CheckNoRelatedSalePackingListLineForSoftwareInstance
       Logout
+
+      # request as owner
+      LoginTestVifibCustomer
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
     """
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
@@ -536,7 +554,13 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
   def test_allocation_scope_private_software_instance_request(self):
     raise NotImplementedError
 
+  def test_allocation_scope_friend_software_instance_request(self):
+    raise NotImplementedError
+
   def test_allocation_scope_closed_software_instance_request(self):
+    raise NotImplementedError
+
+  def test_allocation_scope_empty_software_instance_request(self):
     raise NotImplementedError
 
 def test_suite():
