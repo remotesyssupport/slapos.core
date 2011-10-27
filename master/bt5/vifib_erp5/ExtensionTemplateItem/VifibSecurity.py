@@ -26,6 +26,33 @@
 ##############################################################################
 
 from Products.ERP5Security.ERP5GroupManager import ConsistencyError
+from AccessControl.SecurityManagement import getSecurityManager, \
+             setSecurityManager, newSecurityManager
+from AccessControl import Unauthorized
+
+def restrictMethodAsShadowUser(self, context, method_id, *args, **kw):
+  """
+  Restrict the security access of a method to the unaccessible shadow user
+  associated to the current user.
+  """
+  portal = self.getPortalObject()
+  relative_url = self.getRelativeUrl()
+  if self.getPortalType() != 'Open Sale Order':
+    raise Unauthorized, "%s is not an open sale order" % relative_url
+  else:
+    # Check that open order is the validated one for the current user
+    raise NotImplementedError, "%s may not be the open order of the current user" % relative_url
+
+    portal_membership = self.getPortalObject().portal_membership
+    # Switch to the superuser temporarily, so that the behavior would not
+    # change even if this method is invoked by random users.
+    sm = getSecurityManager()
+    newSecurityManager(None, portal_membership.getMemberById(SHADOW_USER))
+    try:
+      return getattr(context, method_id)(*args, **kw)
+    finally:
+      # Restore the original user.
+      setSecurityManager(sm)
 
 def getComputerSecurityCategory(self, base_category_list, user_name, 
                                 object, portal_type):
