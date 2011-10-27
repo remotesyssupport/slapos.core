@@ -335,6 +335,9 @@ class testVifibMixin(ERP5TypeTestCase):
   def stepLoginTestVifibCustomer(self, **kw):
     self.login('test_vifib_customer')
 
+  def stepLoginTestVifibCustomerA(self, **kw):
+    self.login('test_vifib_customer_a')
+
   def stepLoginTestVifibDeveloper(self, **kw):
     self.login('test_vifib_developer')
 
