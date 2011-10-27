@@ -5,6 +5,12 @@
    <property id='base_category_script'>ERP5Type_getSecurityCategoryFromContent</property>
    <multi_property id='base_category'>source_administration</multi_property>
   </role>
+  <role id='Auditor'>
+   <property id='title'>Sale Trade Condition allocation</property>
+   <property id='condition'>python: here.getAllocationScope('').startswith('open')</property>
+   <property id='base_category_script'>ComputerType_getSecurityCategoryFromSaleTradeCondition</property>
+   <multi_property id='base_category'>aggregate</multi_property>
+  </role>
   <role id='Assignor'>
    <property id='title'>Self Computer</property>
    <property id='condition'>python: context.getReference("") != ""</property>
