@@ -310,7 +310,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       Logout
 
       LoginTestVifibCustomer
-      ComputerSetAllocationEmpty
+      ComputerSetAllocationScopeEmpty
       Tic
       Logout
       SetSequenceSlaXmlCurrentComputer
