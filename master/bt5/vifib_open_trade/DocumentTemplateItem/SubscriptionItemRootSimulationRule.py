@@ -52,7 +52,7 @@ class SubscriptionItemRootSimulationRule(RuleMixin):
   zope.interface.implements(interfaces.IRule,)
 
   # Default Properties
-  property_sheet = (
+  property_sheets = (
     PropertySheet.Base,
     PropertySheet.XMLObject,
     PropertySheet.CategoryCore,
