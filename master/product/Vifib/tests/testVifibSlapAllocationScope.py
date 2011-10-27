@@ -23,6 +23,19 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       computer_reference=computer.getReference(),
     )
 
+  def stepComputerSetAllocationScopeEmpty(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    request = self.app.REQUEST
+    self.getPortal().portal_skins.changeSkin("Hosting")
+    request.set('portal_skin', "Hosting")
+
+    computer.Computer_updateAllocationScope(allocation_scope='',
+      subject_list=[])
+
+    self.getPortal().portal_skins.changeSkin("View")
+    request.set('portal_skin', "View")
+
   def stepComputerSetAllocationScopeClose(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
@@ -48,6 +61,11 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
     self.getPortal().portal_skins.changeSkin("View")
     request.set('portal_skin', "View")
+
+  def stepCheckComputerAllocationScopeEmpty(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    self.assertEqual(computer.getAllocationScope(), '')
 
   def stepCheckComputerAllocationScopeClose(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
@@ -258,6 +276,52 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
+      CheckComputerTradeConditionSujectListEmpty
+      Logout
+    """ + self.prepare_published_software_release + \
+      self.request_and_install_software + """
+      # request as owner
+      LoginTestVifibCustomer
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # fail to instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      CheckNoRelatedSalePackingListLineForSoftwareInstance
+      Logout
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
+
+  def test_allocation_scope_mpty(self):
+    """Check that computer's allocation scope is not set it is unavailable"""
+    sequence_list = SequenceList()
+    sequence_string = """
+      LoginTestVifibCustomer
+      CustomerRegisterNewComputer
+      Tic
+      Logout
+
+      LoginDefaultUser
+      SetComputerCoordinatesFromComputerTitle
+      Logout
+
+      LoginTestVifibCustomer
+      ComputerSetAllocationEmpty
+      Tic
+      Logout
+      SetSequenceSlaXmlCurrentComputer
+
+      SlapLoginCurrentComputer
+      FormatComputer
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerAllocationEmpty
       CheckComputerTradeConditionSujectListEmpty
       Logout
     """ + self.prepare_published_software_release + \
