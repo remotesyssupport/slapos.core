@@ -36,9 +36,34 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     self.getPortal().portal_skins.changeSkin("View")
     request.set('portal_skin', "View")
 
+  def stepCheckComputerAllocationScopeOpenPersonal(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    self.assertEqual(computer.getAllocationScope(), 'open/personal')
+
+  def stepCheckComputerTradeConditionSujectListEmpty(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    trade_condition = computer.getAggregateRelatedValue(
+      portal_type='Sale Supply Line').getParentValue()
+    self.assertEqual(trade_condition.getSubjectList(), [])
+
+  request_and_install_software = """
+      LoginTestVifibCustomer
+      RequestSoftwareInstallation
+      Tic
+      Logout
+
+      SlapLoginCurrentComputer
+      ComputerSoftwareReleaseAvailable
+      Tic
+      SlapLogout
+  """
+
   def test_allocation_scope_open_personal(self):
     """Check that computer is open/personal it is only available
     to owner"""
+    self.computer_partition_amount = 2
     sequence_list = SequenceList()
     sequence_string = """
       LoginTestVifibCustomer
@@ -55,9 +80,27 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       Tic
       SlapLogout
 
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenPersonal
+      CheckComputerTradeConditionSujectListEmpty
+      Logout
+    """ + self.prepare_published_software_release + \
+      self.request_and_install_software + """
+      # request as owner
       LoginTestVifibCustomer
-      ComputerSetAllocationScopeOpenPersonal
+      PersonRequestSoftwareInstance
       Tic
+      Logout
+
+      # instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
       Logout
     """
     sequence_list.addSequenceString(sequence_string)
