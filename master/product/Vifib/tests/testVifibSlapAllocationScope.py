@@ -67,6 +67,11 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       uid=sequence['computer_uid'])
     self.assertEqual(computer.getAllocationScope(), None)
 
+  def stepCheckComputerAllocationScopeOpenFriend(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    self.assertEqual(computer.getAllocationScope(), 'open/friend')
+
   def stepCheckComputerAllocationScopeClose(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
@@ -82,12 +87,21 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       uid=sequence['computer_uid'])
     self.assertEqual(computer.getAllocationScope(), 'open/public')
 
-  def stepCheckComputerTradeConditionSujectListEmpty(self, sequence, **kw):
+  def stepCheckComputerTradeConditionSubjectListEmpty(self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
     trade_condition = computer.getAggregateRelatedValue(
       portal_type='Sale Supply Line').getParentValue()
     self.assertEqual(trade_condition.getSubjectList(), [])
+
+  def stepCheckComputerTradeConditionSubjectListTestVifibAdmin(self, sequence,
+      **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    trade_condition = computer.getAggregateRelatedValue(
+      portal_type='Sale Supply Line').getParentValue()
+    self.assertEqual(trade_condition.getSubjectList(),
+      ['test_computer_vifib_admin@example.org'])
 
   request_and_install_software = """
       LoginTestVifibCustomer
@@ -140,7 +154,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPersonal
-      CheckComputerTradeConditionSujectListEmpty
+      CheckComputerTradeConditionSubjectListEmpty
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -177,10 +191,118 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
+  def stepComputerSetAllocationScopeOpenFriendTestVifibAdmin(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    request = self.app.REQUEST
+    self.getPortal().portal_skins.changeSkin("Hosting")
+    request.set('portal_skin', "Hosting")
+
+    computer.Computer_updateAllocationScope(allocation_scope='open/friend',
+      subject_list=['test_computer_vifib_admin@example.org'])
+
+    self.getPortal().portal_skins.changeSkin("View")
+    request.set('portal_skin', "View")
+    
   def test_allocation_scope_open_friend(self):
     """Check that computer is open/friend it is only available
     to owner and its friends"""
-    raise NotImplementedError
+    self.computer_partition_amount = 3
+    sequence_list = SequenceList()
+    sequence_string = """
+      LoginTestVifibCustomer
+      CustomerRegisterNewComputer
+      Tic
+      Logout
+
+      LoginDefaultUser
+      SetComputerCoordinatesFromComputerTitle
+      Logout
+
+      LoginTestVifibCustomer
+      ComputerSetAllocationScopeOpenFriendTestVifibAdmin
+      Tic
+      Logout
+      SetSequenceSlaXmlCurrentComputer
+
+      SlapLoginCurrentComputer
+      FormatComputer
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckComputerAllocationScopeOpenFriend
+      CheckComputerTradeConditionSubjectListTestVifibAdmin
+      Logout
+    """ + self.prepare_published_software_release + \
+      self.request_and_install_software + """
+      # request as owner
+      LoginTestVifibCustomer
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for owner
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # request as friend
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for friend
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+      # request as someone else
+      LoginTestVifibCustomerA
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # fail to instantiate for someone else
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      CheckNoRelatedSalePackingListLineForSoftwareInstance
+      Logout
+
+      # request as friend
+      LoginTestVifibAdmin
+      PersonRequestSoftwareInstance
+      Tic
+      Logout
+
+      # instantiate for friend
+      LoginDefaultUser
+      ConfirmOrderedSaleOrderActiveSense
+      Tic
+      SetSelectedComputerPartition
+      SelectCurrentlyUsedSalePackingListUid
+      Logout
+      LoginDefaultUser
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed
+      Logout
+
+    """
+    sequence_list.addSequenceString(sequence_string)
+    sequence_list.play(self)
 
   def test_allocation_scope_open_public(self):
     """Check that computer is open/public it is only available
@@ -210,7 +332,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPublic
-      CheckComputerTradeConditionSujectListEmpty
+      CheckComputerTradeConditionSubjectListEmpty
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -278,7 +400,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionSujectListEmpty
+      CheckComputerTradeConditionSubjectListEmpty
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -324,7 +446,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeEmpty
-      CheckComputerTradeConditionSujectListEmpty
+      CheckComputerTradeConditionSubjectListEmpty
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -367,7 +489,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPublic
-      CheckComputerTradeConditionSujectListEmpty
+      CheckComputerTradeConditionSubjectListEmpty
       Logout
     """ + TestVifibSlapWebServiceMixin.prepare_published_software_release \
       + request_and_install_software
