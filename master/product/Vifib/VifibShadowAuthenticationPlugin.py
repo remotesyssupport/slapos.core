@@ -209,54 +209,9 @@ class VifibShadowAuthenticationPlugin(BasePlugin):
             return ()
         loggable_object = catalog_result[0].getObject()
 
-        # Fetch category values from defined scripts
-        for (method_name, base_category_list) in security_definition_list:
-          base_category_list = tuple(base_category_list)
-          method = getattr(self, method_name)
-          security_category_list = security_category_dict.setdefault(
-                                            base_category_list, [])
-          try:
-            # The called script may want to distinguish if it is called
-            # from here or from _updateLocalRolesOnSecurityGroups.
-            # Currently, passing portal_type='' (instead of 'Person')
-            # is the only way to make the difference.
-            security_category_list.extend(
-              method(base_category_list, user_name, loggable_object, '')
-            )
-          except ConflictError:
-            raise
-          except:
-            LOG('ERP5GroupManager', WARNING,
-                'could not get security categories from %s' % (method_name,),
-                error = sys.exc_info())
-
-        # Get group names from category values
-        # XXX try ERP5Type_asSecurityGroupIdList first for compatibility
-        generator_name = 'ERP5Type_asSecurityGroupIdList'
-        group_id_list_generator = getattr(self, generator_name, None)
-        if group_id_list_generator is None:
-          generator_name = ERP5TYPE_SECURITY_GROUP_ID_GENERATION_SCRIPT
-          group_id_list_generator = getattr(self, generator_name)
-        for base_category_list, category_value_list in \
-            security_category_dict.iteritems():
-          for category_dict in category_value_list:
-            try:
-              group_id_list = group_id_list_generator(
-                                        category_order=base_category_list,
-                                        **category_dict)
-              if isinstance(group_id_list, str):
-                group_id_list = [group_id_list]
-              security_group_list.extend(group_id_list)
-            except ConflictError:
-              raise
-            except:
-              LOG('ERP5GroupManager', WARNING,
-                  'could not get security groups from %s' %
-                  generator_name,
-                  error = sys.exc_info())
       finally:
         setSecurityManager(sm)
-      return tuple(security_group_list)
+      return ('R-SHADOW', 'SHADOW-%s' % user_name)
 
     if not NO_CACHE_MODE:
       _getGroupsForPrincipal = CachingMethod(_getGroupsForPrincipal,
