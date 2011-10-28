@@ -59,18 +59,11 @@ for sale_order_line in portal.portal_catalog(\n
       ):\n
   sale_order = sale_order_line.getParentValue()\n
   if sale_order.getSimulationState() == \'ordered\':\n
-    hosting_subscription = sale_order_line.getAggregateValue(portal_type="Hosting Subscription")\n
-    open_order_line = portal.portal_catalog.getResultValue(\n
-      portal_type="Open Sale Order Line",\n
-      validation_state="validated")\n
-    if open_order_line is not None:\n
-      open_order = open_order_line.getParentValue()\n
-      try:\n
-        # Find user open order\n
-        open_order.OpenSaleOrder_restrictMethodAsShadowUser(sale_order.confirm)\n
-      except ValueError:\n
-        # It was not possible to find free Computer Partition\n
-        continue\n
+    try:\n
+      sale_order.confirm\n
+    except ValueError:\n
+      # It was not possible to find free Computer Partition\n
+      continue\n
 </string> </value>
         </item>
         <item>
