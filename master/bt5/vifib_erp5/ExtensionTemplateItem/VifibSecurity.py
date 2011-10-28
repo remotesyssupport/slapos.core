@@ -118,7 +118,7 @@ def getSoftwareInstanceSecurityCategory(self, base_category_list, user_name,
               self.getPortalFutureInventoryStateList() + \
               self.getPortalReservedInventoryStateList() + \
               self.getPortalTransitInventoryStateList(),
-          sort_on=(('creation_date', 'DESC'),)
+          sort_on=(('movement.start_date', 'DESC'),)
         )
         if current_delivery_line is not None:
           hosting_item = current_delivery_line.getAggregateValue(portal_type='Hosting Subscription')
