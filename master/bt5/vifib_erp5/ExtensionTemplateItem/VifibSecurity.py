@@ -30,7 +30,7 @@ from AccessControl.SecurityManagement import getSecurityManager, \
              setSecurityManager, newSecurityManager
 from AccessControl import Unauthorized
 
-def restrictMethodAsShadowUser(self, context, method_id, *args, **kw):
+def restrictMethodAsShadowUser(self, callable_object, *args, **kw):
   """
   Restrict the security access of a method to the unaccessible shadow user
   associated to the current user.
@@ -38,18 +38,27 @@ def restrictMethodAsShadowUser(self, context, method_id, *args, **kw):
   portal = self.getPortalObject()
   relative_url = self.getRelativeUrl()
   if self.getPortalType() != 'Open Sale Order':
-    raise Unauthorized, "%s is not an open sale order" % relative_url
+    raise Unauthorized("%s is not an Open Sale Order" % relative_url)
   else:
     # Check that open order is the validated one for the current user
-    raise NotImplementedError, "%s may not be the open order of the current user" % relative_url
+    if self.getValidationState() != 'validated':
+      raise Unauthorized('Open Sale Order %s is not validated.' % relative_url)
+    person = self.ERP5Site_getAuthenticatedMemberPersonValue()
+    if person is None:
+      raise Unauthorized('No person document found')
+    person_uid = person.getUid()
+    if self.getDestinationSectionUid() != person_uid:
+      raise Unauthorized('This Open Sale Order does not belongs to %s'%
+        person.getReference())
 
     portal_membership = self.getPortalObject().portal_membership
-    # Switch to the superuser temporarily, so that the behavior would not
+    # Switch to the shadow user temporarily, so that the behavior would not
     # change even if this method is invoked by random users.
     sm = getSecurityManager()
-    newSecurityManager(None, portal_membership.getMemberById(SHADOW_USER))
+    newSecurityManager(None, portal_membership.getMemberById(
+      self.getReference()))
     try:
-      return getattr(context, method_id)(*args, **kw)
+      return callable_object(*args, **kw)
     finally:
       # Restore the original user.
       setSecurityManager(sm)
