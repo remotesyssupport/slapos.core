@@ -57,7 +57,7 @@ for sale_supply_line in person.portal_catalog(\n
                destination_section_value=person, portal_type="Sale Supply Line", validation_state="validated"):\n
   sale_trade_condition = sale_supply_line.getParentValue()\n
   if sale_trade_condition.getPortalType() == "Sale Trade Condition":\n
-    sale_trade_condition.activate(after_path_and_method_id=(open_sale_order.getPath(), (\'immediateReindexObject\',)),).updateLocalRolesOnSecurityGroups()\n
+    sale_trade_condition.activate(after_path_and_method_id=(open_sale_order.getPath(), (\'immediateReindexObject\', \'recursiveImmediateReindexObject\')),).updateLocalRolesOnSecurityGroups()\n
 </string> </value>
         </item>
         <item>
