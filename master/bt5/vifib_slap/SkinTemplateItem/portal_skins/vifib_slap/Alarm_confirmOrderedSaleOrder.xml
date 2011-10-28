@@ -60,7 +60,7 @@ for sale_order_line in portal.portal_catalog(\n
   sale_order = sale_order_line.getParentValue()\n
   if sale_order.getSimulationState() == \'ordered\':\n
     try:\n
-      sale_order.confirm\n
+      sale_order.confirm()\n
     except ValueError:\n
       # It was not possible to find free Computer Partition\n
       continue\n
