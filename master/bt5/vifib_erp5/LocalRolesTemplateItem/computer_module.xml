@@ -7,6 +7,9 @@
    <item>Auditor</item>
    <item>Author</item>
   </role>
+  <role id='R-SHADOW'>
+   <item>Auditor</item>
+  </role>
   <role id='devel'>
    <item>Owner</item>
   </role>
