@@ -105,7 +105,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       uid=sequence['computer_uid'])
     trade_condition = computer.getAggregateRelatedValue(
       portal_type='Sale Supply Line').getParentValue()
-    self.assertEqual(trade_condition.getSubjectList(), [])
+    self.assertEqual(trade_condition.getSubjectList(), [''])
 
   def stepCheckComputerTradeConditionSubjectListTestVifibAdmin(self, sequence,
       **kw):
