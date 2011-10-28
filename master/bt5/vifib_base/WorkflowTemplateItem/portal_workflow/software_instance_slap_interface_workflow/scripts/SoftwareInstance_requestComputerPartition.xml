@@ -66,8 +66,6 @@ if packing_list_line is not None:\n
 # Find a free computer partition. This means:\n
 # Computer Partition which doesn\'t have non delivered sale packing list related\n
 \n
-software_instance.Instance_findPartition(software_release_url_string)\n
-\n
 software_release_document = context.portal_catalog.getResultValue(\n
   portal_type=\'Software Release\',\n
   url_string=software_release_url_string)\n
@@ -76,6 +74,15 @@ software_release_document = context.portal_catalog.getResultValue(\n
 portal = context.getPortalObject()\n
 \n
 hosting_subscription = software_instance.portal_catalog.getResultValue(uid=hosting_subscription_uid)\n
+\n
+open_order_line = portal.portal_catalog.getResultValue(\n
+  portal_type="Open Sale Order Line",\n
+  validation_state="validated")\n
+open_order = open_order_line.getParentValue()\n
+computer_partition_relative_url = open_order.OpenSaleOrder_restrictMethodAsShadowUser(\n
+                                                software_instance.Instance_findPartition,\n
+                                                software_release_url_string)\n
+\n
 sale_packing_list_line = context.HostingSubscription_getInstancePackingListLine(state_change)\n
 base_sale_packing_list = sale_packing_list_line.getParentValue()\n
 # XXX: SoftwareInstance_createSalePackingList shall be used to create new Sale Packing List\n
@@ -94,7 +101,8 @@ sale_packing_list = sale_packing_list_module.newContent(\n
 sale_packing_list_line = sale_packing_list.newContent(\n
   portal_type=\'Sale Packing List Line\',\n
   resource=context.portal_preferences.getPreferredInstanceSetupResource(),\n
-  aggregate_value_list=[software_instance, software_release_document, computer_partition, hosting_subscription]\n
+  aggregate_list=[software_instance.getRelativeUrl(), software_release_document.getRelativeUrl(), \n
+                  computer_partition_relative_url, hosting_subscription.getRelativeUrl()]\n
 )\n
 \n
 # confirm Sale Packing List\n

@@ -106,7 +106,7 @@ if computer_partition is None:\n
 # lock computer partition\n
 computer_partition.serialize()\n
 \n
-return computer_partition\n
+return computer_partition.getRelativeUrl()\n
 
 
 ]]></string> </value>
