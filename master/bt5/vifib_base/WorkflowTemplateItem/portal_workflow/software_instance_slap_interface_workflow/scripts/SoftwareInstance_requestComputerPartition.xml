@@ -51,7 +51,6 @@
         <item>
             <key> <string>_body</string> </key>
             <value> <string>from DateTime import DateTime\n
-import random\n
 \n
 portal = context.getPortalObject()\n
 software_instance = state_change[\'object\']\n
@@ -80,8 +79,9 @@ open_order_line = portal.portal_catalog.getResultValue(\n
   validation_state="validated")\n
 open_order = open_order_line.getParentValue()\n
 computer_partition_relative_url = open_order.OpenSaleOrder_restrictMethodAsShadowUser(\n
-                                                software_instance.Instance_findPartition,\n
-                                                software_release_url_string)\n
+                                                open_order.OpenSaleOrder_findPartition,\n
+                                                software_release_url_string, software_instance.getSourceReference(),\n
+                                                software_instance.getPortalType(), software_instance.getSlaXmlAsDict())\n
 \n
 sale_packing_list_line = context.HostingSubscription_getInstancePackingListLine(state_change)\n
 base_sale_packing_list = sale_packing_list_line.getParentValue()\n

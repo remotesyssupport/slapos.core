@@ -71,7 +71,10 @@ for order_line in order.getMovementList():\n
         validation_state="validated")\n
       if open_order_line is not None:\n
         open_order = open_order_line.getParentValue()\n
-        computer_partition_relative_url = open_order.OpenSaleOrder_restrictMethodAsShadowUser(open_order, software_instance.Instance_findPartition, software_release.getUrlString())\n
+        computer_partition_relative_url = open_order.OpenSaleOrder_restrictMethodAsShadowUser(\n
+          open_order, open_order.OpenSaleOrder_findPartition,\n
+          software_release.getUrlString(), software_instance.getSourceReference(),\n
+          software_instance.getPortalType(), software_instance.getSlaXmlAsDict())\n
 \n
         order_line.edit(\n
           aggregate_list=order_line.getAggregateList()+[computer_partition_relative_url])\n

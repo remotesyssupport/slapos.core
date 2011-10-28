@@ -53,33 +53,30 @@
             <value> <string encoding="cdata"><![CDATA[
 
 import random\n
-software_instance = context\n
+open_sale_order = context\n
 \n
 computer_partition = None\n
 query_kw = {\n
   \'software_release_url\': software_release_url,\n
   \'portal_type\': \'Computer Partition\',\n
 }\n
-if software_instance.getPortalType() == "Slave Instance":\n
+if software_instance_portal_type == "Slave Instance":\n
   query_kw[\'free_for_request\'] = 0\n
-  query_kw[\'software_type\'] = software_instance.getSourceReference()\n
-elif software_instance.getPortalType() == "Software Instance":\n
+  query_kw[\'software_type\'] = software_type\n
+elif software_instance_portal_type == "Software Instance":\n
   query_kw[\'free_for_request\'] = 1\n
 else:\n
-  raise NotImplementedError, "%s has unknown %s portal type" % \\\n
-          (software_instance.getRelativeUrl(), \n
-           software_instance.getPortalType())\n
- \n
+  raise NotImplementedError, "Unknown portal type %s" % \\\n
+     software_instance_portal_type \n
 # support SLA\n
-filter_kw = software_instance.getSlaXmlAsDict()\n
 if "computer_guid" in filter_kw:\n
   query_kw["parent_reference"] = filter_kw["computer_guid"]\n
 \n
 SQL_WINDOW_SIZE = 50\n
 \n
 # fetch at mot 50 random Computer Partitions, and check if they are ok\n
-isTransitionPossible = software_instance.getPortalObject().portal_workflow.isTransitionPossible\n
-result_count = software_instance.portal_catalog.countResults(**query_kw)[0][0]\n
+isTransitionPossible = open_sale_order.getPortalObject().portal_workflow.isTransitionPossible\n
+result_count = open_sale_order.portal_catalog.countResults(**query_kw)[0][0]\n
 offset = max(0, result_count-1)\n
 if offset >= SQL_WINDOW_SIZE:\n
   limit = (random.randint(0, offset), SQL_WINDOW_SIZE)\n
@@ -89,7 +86,7 @@ else:\n
 for computer_partition_candidate in context.portal_catalog(\n
                                          limit=limit, **query_kw):\n
   computer_partition_candidate = computer_partition_candidate.getObject()    \n
-  if (software_instance.getPortalType() == "Software Instance"):\n
+  if software_instance_portal_type == "Software Instance":\n
     # Check if the computer partition can be marked as busy\n
     if isTransitionPossible(computer_partition_candidate, \'mark_busy\'):\n
       computer_partition = computer_partition_candidate\n
@@ -113,11 +110,11 @@ return computer_partition.getRelativeUrl()\n
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>software_release_url</string> </value>
+            <value> <string>software_release_url, software_type, software_instance_portal_type, filter_kw</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>Instance_findPartition</string> </value>
+            <value> <string>OpenSaleOrder_findPartition</string> </value>
         </item>
       </dictionary>
     </pickle>
