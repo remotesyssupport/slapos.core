@@ -52,6 +52,9 @@
             <key> <string>_body</string> </key>
             <value> <string encoding="cdata"><![CDATA[
 
+import random\n
+software_instance = context\n
+\n
 computer_partition = None\n
 query_kw = {\n
   \'software_release_url\': software_release_url,\n
@@ -83,7 +86,7 @@ if offset >= SQL_WINDOW_SIZE:\n
 else:\n
   limit = (0, SQL_WINDOW_SIZE)\n
 \n
-for computer_partition_candidate in portal.portal_catalog(\n
+for computer_partition_candidate in context.portal_catalog(\n
                                          limit=limit, **query_kw):\n
   computer_partition_candidate = computer_partition_candidate.getObject()    \n
   if (software_instance.getPortalType() == "Software Instance"):\n
@@ -110,7 +113,7 @@ return computer_partition\n
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string>url_string</string> </value>
+            <value> <string>software_release_url</string> </value>
         </item>
         <item>
             <key> <string>id</string> </key>
