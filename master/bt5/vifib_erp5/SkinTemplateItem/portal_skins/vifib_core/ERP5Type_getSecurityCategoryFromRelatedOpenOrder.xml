@@ -50,43 +50,53 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>"""\n
-Core security script - defines the way to get security groups of the current user.\n
+            <value> <string># XXX For now, this script requires proxy manager\n
 \n
-WARNING: providing such script in erp5_dms could be dangerous\n
-if this conflicts with an existing production site which uses\n
-deprecated ERP5Type_asSecurityGroupIdList\n
-"""\n
+# base_category_list : list of category values we need to retrieve\n
+# user_name : string obtained from getSecurityManager().getUser().getUserName() [NuxUserGroup]\n
+#             or from getSecurityManager().getUser().getId() [PluggableAuthService with ERP5GroupManager]\n
+# object : object which we want to assign roles to.\n
+# portal_type : portal type of object\n
 \n
-return (\n
-  # Person security\n
-  (\'ERP5Type_getSecurityCategoryFromAssignment\', [\'function\', \'group\']),\n
-  (\'ERP5Type_getSecurityCategoryFromAssignment\', [\'role\']),\n
-  (\'ERP5Type_getPersonSecurityFromHostingSubscription\', [\'aggregate\']),\n
+# must always return a list of dicts\n
 \n
-  # Computer security\n
-  (\'ERP5Type_getComputerSecurityCategory\', [\'role\']),\n
+category_list = []\n
 \n
-  # Instance security\n
-  (\'ERP5Type_getSoftwareInstanceSecurityCategory\', [\'role\']),\n
-  (\'ERP5Type_getSoftwareInstanceSecurityCategory\', [\'aggregate\']),\n
+if obj is None:\n
+  return []\n
 \n
-  # Person + Instance additional secutity\n
-  (\'ERP5Type_getSecurityCategoryForPersonSoftwareInstance\', [\'role\']),\n
-  (\'ERP5Type_getSecurityCategoryFromRelatedOpenOrder\', [\'aggregate\']),\n
+if obj.getPortalType() == \'Person\':\n
+  open_sale_order = obj.getDestinationSectionRelatedValue(portal_type=\'Open Sale Order\')\n
+  if open_sale_order is not None and open_sale_order.getValidationState() == \'validated\':\n
+    return [{\'aggregate\': open_sale_order.getRelativeUrl()}]\n
 \n
-  # Open Sale Order Security\n
-  (\'ERP5Type_getOpenSaleOrderSecurityCategory\', [\'role\']),\n
-)\n
+if obj.getPortalType() == \'Software Instance\':\n
+  delivery_line = obj.getAggregateRelatedValue(portal_type=\'Sale Packing List Line\')\n
+  if delivery_line is not None:\n
+    hosting_subscription = delivery_line.getAggregateValue(portal_type=\'Hosting Subscription\')\n
+    if hosting_subscription is not None:\n
+      open_sale_order_line = hosting_subscription.getAggregateRelatedValue(portal_type=\'Open Sale Order Line\')\n
+      if open_sale_order_line is not None and open_sale_order_line.getParentValue().getValidationState() == \'validated\':\n
+        return [{\'aggregate\': open_sale_order_line.getParentValue().getRelativeUrl()}]\n
+    \n
+return []\n
 </string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string></string> </value>
+            <value> <string>base_category_list, user_name, obj, portal_type</string> </value>
+        </item>
+        <item>
+            <key> <string>_proxy_roles</string> </key>
+            <value>
+              <tuple>
+                <string>Manager</string>
+              </tuple>
+            </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>ERP5Type_getSecurityCategoryMapping</string> </value>
+            <value> <string>ERP5Type_getSecurityCategoryFromRelatedOpenOrder</string> </value>
         </item>
       </dictionary>
     </pickle>
