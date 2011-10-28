@@ -58,9 +58,10 @@ computer.edit(\n
 )\n
 \n
 sale_supply_line = computer.Computer_getRelatedSaleSupplyLine()\n
+sale_trade_condition = sale_supply_line.getParentValue()\n
 if len(subject_list) == 0:\n
   subject_list = [\'\']\n
-sale_supply_line.edit(\n
+sale_trade_condition.edit(\n
   subject_list=subject_list)\n
 \n
 message = context.Base_translateString("Allocation scope updated!")\n
