@@ -310,15 +310,10 @@ class VifibShadowAuthenticationPlugin(BasePlugin):
 #List implementation of class
 classImplements(VifibShadowAuthenticationPlugin,
                 plugins.IAuthenticationPlugin)
-#classImplements( VifibShadowAuthenticationPlugin,
-#                plugins.ILoginPasswordHostExtractionPlugin
-#               )
 classImplements( VifibShadowAuthenticationPlugin,
                plugins.IGroupsPlugin
                )
 classImplements( VifibShadowAuthenticationPlugin,
                plugins.IUserEnumerationPlugin
                )
-
-
 InitializeClass(VifibShadowAuthenticationPlugin)
