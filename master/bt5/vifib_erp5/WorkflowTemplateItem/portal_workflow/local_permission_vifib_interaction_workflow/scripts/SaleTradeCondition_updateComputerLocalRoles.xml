@@ -50,7 +50,7 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>sale_trade_condition = context\n
+            <value> <string>sale_trade_condition = state_change[\'object\']\n
 \n
 for sale_supply_line in sale_trade_condition.contentValues(portal_type="Sale Supply Line"):\n
   for computer in sale_supply_line.getAggregateValueList(portal_type="Computer"):\n
