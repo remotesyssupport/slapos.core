@@ -42,34 +42,6 @@ def restrictMethodAsShadowUser(self, callable_object, *args, **kw):
     # Check that open order is the validated one for the current user
     if self.getValidationState() != 'validated':
       raise Unauthorized('Open Sale Order %s is not validated.' % relative_url)
-    person = self.ERP5Site_getAuthenticatedMemberPersonValue()
-    if person is None:
-      software_instance = self.portal_catalog.getResultValue(
-        portal_type='Software Instance',
-        reference=getSecurityManager().getUser().getId())
-      if software_instance is not None:
-        raise Unauthorized('No Person nor Software Instance document found')
-    if person is not None:
-      person_uid = person.getUid()
-      if self.getDestinationSectionUid() != person_uid:
-        raise Unauthorized('This Open Sale Order does not belongs to %s'%
-          person.getReference())
-    else:
-      delivery_line = software_instance.getAggregateRelatedValue(
-        portal_type='Sale Packing List Line')
-      if delivery_line is None:
-        raise Unauthorized('No delivery line found')
-      hosting_subscription = delivery_line.getAggregateValue(
-        portal_type='Hosting Subscription')
-      if hosting_subscription is None:
-        raise Unauthorized('No Hosting Subscription')
-      open_order_line = hosting_subscription.getAggergateRelatedValue(
-          portal_type='Open Sale Order Line')
-      if open_order_line is None:
-        raise Unauthorized('No Open Sale Order')
-      if open_order_line.getParentValue().getUid() != self.getUid():
-        raise Unauthorized('This Open Sale Order does not belongs to %s'%
-          software_instance.getReference())
 
     portal_membership = self.getPortalObject().portal_membership
     # Switch to the shadow user temporarily, so that the behavior would not
