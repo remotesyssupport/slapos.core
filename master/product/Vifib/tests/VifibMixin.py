@@ -317,7 +317,7 @@ class testVifibMixin(ERP5TypeTestCase):
     self.logMessage("Bootstrap Vifib Without Security...")
     self.login()
     self.setupVifibMachineAuthenticationPlugin()
-    self.setupVifibShadowAuthenticationPlugin()
+ #    self.setupVifibShadowAuthenticationPlugin()
     self.setPreference()
     self.setSystemPreference()
     self.setupRuleTool()
