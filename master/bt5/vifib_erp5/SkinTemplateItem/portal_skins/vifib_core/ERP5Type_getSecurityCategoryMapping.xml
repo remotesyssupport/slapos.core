@@ -70,6 +70,9 @@ return (\n
   # Instance security\n
   (\'ERP5Type_getSoftwareInstanceSecurityCategory\', [\'role\']),\n
   (\'ERP5Type_getSoftwareInstanceSecurityCategory\', [\'aggregate\']),\n
+\n
+  # Open Sale Order Security\n
+  (\'ERP5Type_getOpenSaleOrderSecurityCategory\', [\'role\']),\n
 )\n
 </string> </value>
         </item>

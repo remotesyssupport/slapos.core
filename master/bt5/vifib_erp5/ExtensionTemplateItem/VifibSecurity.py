@@ -130,3 +130,31 @@ def getSoftwareInstanceSecurityCategory(self, base_category_list, user_name,
                             "with reference %r" % user_name
 
   return category_list
+
+def getOpenSaleOrderSecurityCategory(self, base_category_list, user_name, 
+                                object, portal_type):
+  """
+  This script returns a list of dictionaries which represent
+  the security groups which a computer is member of.
+  """
+  category_list = []
+
+  open_sale_order_list = self.portal_catalog.unrestrictedSearchResults(
+    portal_type='Open Sale Order',
+    reference=user_name,
+    validation_state="validated",
+    limit=2,
+  )
+
+  if len(open_sale_order_list) == 1:
+    open_sale_order = open_sale_order_list[0].getObject()
+    for base_category in base_category_list:
+      if base_category == "role":
+        category_list.append(
+         {base_category: ['role/open_order']})
+  elif len(open_sale_order_list) > 1:
+    raise ConsistencyError, "Error: There is more than one Open Sale Order " \
+                            "with reference '%s'" % user_name
+
+  return category_list
+
