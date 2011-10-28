@@ -52,7 +52,7 @@
             <key> <string>_body</string> </key>
             <value> <string>open_sale_order = state_change[\'object\']\n
 \n
-person = context.getDestinationValue()\n
+person = open_sale_order.getDestinationSectionValue()\n
 for sale_supply_line in person.portal_catalog(\n
                destination_section_value=person, portal_type="Sale Supply Line", validation_state="validated"):\n
   sale_trade_condition = sale_supply_line.getParentValue()\n
