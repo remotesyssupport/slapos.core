@@ -43,12 +43,11 @@ def restrictMethodAsShadowUser(self, callable_object, *args, **kw):
     if self.getValidationState() != 'validated':
       raise Unauthorized('Open Sale Order %s is not validated.' % relative_url)
 
-    portal_membership = self.getPortalObject().portal_membership
+    acl_users = self.getPortalObject().acl_users
     # Switch to the shadow user temporarily, so that the behavior would not
     # change even if this method is invoked by random users.
     sm = getSecurityManager()
-    newSecurityManager(None, portal_membership.getMemberById(
-      self.getReference()))
+    newSecurityManager(None, acl_users.getUserById(self.getReference()))
     try:
       return callable_object(*args, **kw)
     finally:
