@@ -70,10 +70,11 @@ person_list = []\n
 person_list.extend(obj.getDestinationSectionValueList(portal_type="Person"))\n
 \n
 for person in person_list:\n
-  category_list.append(person.portal_catalog(\n
+  for open_order in portal.portal_catalog(\n
       portal_type="Open Sale Order",\n
       validation_state="validated",\n
-      destination_decision_value=person))\n
+      destination_decision_value=person):\n
+    category_list.append(open_order)\n
 \n
 if category_list:\n
   return {"Auditor": [x.getReference() for x in category_list]}\n
