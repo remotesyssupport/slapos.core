@@ -283,7 +283,7 @@ class testVifibMixin(ERP5TypeTestCase):
     if len(vifib_auth_list) == 0:
       vifib_dispacher = pas.manage_addProduct['Vifib']
       vifib_dispacher.addVifibShadowAuthenticationPlugin('vifib_auth_shadow')
-      vifib_auth = pas.vifib_auth
+      vifib_auth = pas.vifib_auth_shadow
     else:
       if len(vifib_auth_list) > 1:
         raise ValueError('More then one Vifib Shadow authentication')
@@ -317,7 +317,7 @@ class testVifibMixin(ERP5TypeTestCase):
     self.logMessage("Bootstrap Vifib Without Security...")
     self.login()
     self.setupVifibMachineAuthenticationPlugin()
- #    self.setupVifibShadowAuthenticationPlugin()
+    self.setupVifibShadowAuthenticationPlugin()
     self.setPreference()
     self.setSystemPreference()
     self.setupRuleTool()
