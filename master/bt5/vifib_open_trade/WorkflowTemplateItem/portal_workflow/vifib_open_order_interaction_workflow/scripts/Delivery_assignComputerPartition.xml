@@ -65,10 +65,16 @@ for order_line in order.getMovementList():\n
       software_release = order_line.getAggregateValue(portal_type="Software Release")\n
       software_instance = order_line.getAggregateValue(portal_type=instance_portal_type_list)\n
 \n
-      computer_partition = software_instance.Instance_findPartition(software_release.getUrlString())\n
+      hosting_subscription = order_line.getAggregateValue(portal_type="Hosting Subscription")\n
+      open_order_line = portal.portal_catalog.getResultValue(\n
+        portal_type="Open Sale Order Line",\n
+        validation_state="validated")\n
+      if open_order_line is not None:\n
+        open_order = open_order_line.getParentValue()\n
+        computer_partition_relative_url = open_order.OpenSaleOrder_restrictMethodAsShadowUser(software_instance.Instance_findPartition, software_release.getUrlString())\n
 \n
-      order_line.edit(\n
-        aggregate_list=order_line.getAggregateList()+[computer_partition.getRelativeUrl()])\n
+        order_line.edit(\n
+          aggregate_list=order_line.getAggregateList()+[computer_partition_relative_url])\n
 </string> </value>
         </item>
         <item>
