@@ -67,8 +67,7 @@ if obj is None:\n
 \n
 portal = obj.getPortalObject()\n
 person_list = []\n
-for base_category in base_category_list:\n
-  person_list.extend(obj.getCategoryMembershipList(base_category, portal_type="Person"))\n
+person_list.extend(obj.getDestinationSectionValueList(portal_type="Person"))\n
 \n
 for person in person_list:\n
   category_list.append(person.portal_catalog(\n
