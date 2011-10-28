@@ -91,9 +91,9 @@ for sale_supply_line in sale_supply_line_list:\n
       break\n
 \n
 if public:\n
-  return {"Auditor": ["R-Shadow"]}\n
+  return {"Auditor": ["R-SHADOW"]}\n
 elif category_list:\n
-  return {"Auditor": ["Shadow-%s" % x.getReference() for x in category_list]}\n
+  return {"Auditor": ["SHADOW-%s" % x.getReference() for x in category_list]}\n
 else:\n
   return []\n
 </string> </value>

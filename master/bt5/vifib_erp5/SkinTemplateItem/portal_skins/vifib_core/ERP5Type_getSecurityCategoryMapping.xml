@@ -75,8 +75,6 @@ return (\n
   (\'ERP5Type_getSecurityCategoryForPersonSoftwareInstance\', [\'role\']),\n
   (\'ERP5Type_getSecurityCategoryFromRelatedOpenOrder\', [\'aggregate\']),\n
 \n
-  # Open Sale Order Security\n
-  (\'ERP5Type_getOpenSaleOrderSecurityCategory\', [\'role\']),\n
 )\n
 </string> </value>
         </item>
