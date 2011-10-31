@@ -837,10 +837,16 @@ class SlapTool(BaseTool):
     Get the computer partition defined in an available computer
     """
     # Related key might be nice
-    computer = self._getComputerDocument(computer_reference)
+    sm = getSecurityManager()
+    try:
+      newSecurityManager(None, self.getPortalObject()\
+        .portal_membership.getMemberById(SUPER_USER))
+      parent_uid = self._getComputerDocument(computer_reference).getUid()
+    finally:
+      setSecurityManager(sm)
     return self._getDocument(portal_type='Computer Partition',
                              reference=computer_partition_reference,
-                             parent_uid=computer.getUid())
+                             parent_uid=parent_uid)
 
   def _getUsageReportServiceDocument(self):
     service_document = self.Base_getUsageReportServiceDocument()
