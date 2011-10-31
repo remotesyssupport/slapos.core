@@ -61,6 +61,11 @@ sale_supply_line = computer.Computer_getRelatedSaleSupplyLine()\n
 sale_trade_condition = sale_supply_line.getParentValue()\n
 if len(subject_list) == 0:\n
   subject_list = [\'\']\n
+else:\n
+  # add self as friend\n
+  self_email = portal.ERP5Site_getAuthenticatedMemberPersonValue().getDefaultEmailCoordinateText()\n
+  if self_email not in subject_list:\n
+    subject_list.append(self_email)\n
 sale_trade_condition.edit(\n
   subject_list=subject_list)\n
 \n
