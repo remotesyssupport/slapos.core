@@ -377,7 +377,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionSubjectListEmptyString
+      CheckComputerTradeConditionSubjectListTestVifibCustomer
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -423,7 +423,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeEmpty
-      CheckComputerTradeConditionSubjectListEmptyString
+      CheckComputerTradeConditionSubjectListTestVifibCustomer
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -466,7 +466,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPublic
-      CheckComputerTradeConditionSubjectListEmptyString
+      CheckComputerTradeConditionSubjectListEmpty
       Logout
     """ + TestVifibSlapWebServiceMixin.prepare_published_software_release \
       + request_and_install_software
@@ -686,7 +686,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionSubjectListEmptyString
+      CheckComputerTradeConditionSubjectListTestVifibCustomer
       Logout
 
       # now this computer patrition request new one
@@ -726,7 +726,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeEmpty
-      CheckComputerTradeConditionSubjectListEmptyString
+      CheckComputerTradeConditionSubjectListTestVifibCustomer
       Logout
 
       # now this computer patrition request new one
