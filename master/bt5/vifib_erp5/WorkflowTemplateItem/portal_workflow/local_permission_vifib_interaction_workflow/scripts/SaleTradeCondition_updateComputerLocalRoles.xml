@@ -54,7 +54,17 @@
 \n
 for sale_supply_line in sale_trade_condition.contentValues(portal_type="Sale Supply Line"):\n
   for computer in sale_supply_line.getAggregateValueList(portal_type="Computer"):\n
-    computer.activate(after_path_and_method_id=(sale_trade_condition.getPath(), (\'immediateReindexObject\', \'recursiveImmediateReindexObject\')),).updateLocalRolesOnSecurityGroups()\n
+    tag = \'%s_related_document_reindex\' % computer.getPath()\n
+    computer.activate(activity=\'SQLQueue\', tag=tag, after_path_and_method_id=(sale_trade_condition.getPath(),\n
+      (\'immediateReindexObject\', \'recursiveImmediateReindexObject\'))\n
+    ).serialize()\n
+    computer.activate(activity=\'SQLQueue\', tag=tag, after_path_and_method_id=(sale_supply_line.getPath(),\n
+      (\'immediateReindexObject\', \'recursiveImmediateReindexObject\'))\n
+    ).serialize()\n
+    computer.activate(activity=\'SQLQueue\', tag=tag, after_path_and_method_id=(computer.getPath(),\n
+      (\'immediateReindexObject\', \'recursiveImmediateReindexObject\'))\n
+    ).serialize()\n
+    computer.activate(after_tag=tag).updateLocalRolesOnSecurityGroups()\n
 </string> </value>
         </item>
         <item>
