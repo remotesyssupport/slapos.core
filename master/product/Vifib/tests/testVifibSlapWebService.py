@@ -540,7 +540,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
           }
       computer_dict['partition_list'].append(partition_dict)
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     self.slap.registerComputer(computer_guid).updateConfiguration(
         xml_marshaller.dumps(computer_dict))
     sequence.edit(
@@ -551,7 +551,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     software_release_url = self.portal.portal_catalog.getResultValue(
         uid=sequence['software_release_uid']).getUrlString()
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     # XXX: it is impossible to do:
     #  sr = self.slap.registerSoftwareRelease(
     #       software_release=software_release_url)
@@ -564,7 +564,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepSoftwareInstanceStopped(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         sequence['computer_partition_reference'])
     computer_partition.stopped()
@@ -572,7 +572,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepSoftwareInstanceStarted(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         sequence['computer_partition_reference'])
     computer_partition.started()
@@ -580,7 +580,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepSoftwareInstanceAvailable(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         sequence['computer_partition_reference'])
     computer_partition.available()
@@ -588,7 +588,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepSoftwareInstanceDestroyed(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         sequence['computer_partition_reference'])
     computer_partition.destroyed()
@@ -596,7 +596,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepSoftwareInstanceBuilding(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         sequence['computer_partition_reference'])
     computer_partition.building()
@@ -1061,7 +1061,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertTrue(isinstance(computer, slap.Computer))
 
@@ -1117,7 +1117,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       **kw):
     computer_guid = sequence.get("computer_reference", str(random()))
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertRaises(slap.Unauthorized, computer.getComputerPartitionList)
 
@@ -1126,7 +1126,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence.get("computer_reference", str(random()))
     partition_id = str(random())
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     self.slap.registerComputerPartition(computer_guid, partition_id)
     self.assertRaises(slap.Unauthorized,
         self.slap.registerComputerPartition, computer_guid, partition_id)
@@ -1139,7 +1139,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = str(random())
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     self.assertRaises(slap.NotFoundError,
         self.slap.registerComputerPartition, computer_guid, partition_id)
 
@@ -1184,7 +1184,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference_list"][0]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputerPartition(computer_guid, partition_id)
     self.assertTrue(isinstance(computer, slap.ComputerPartition))
 
@@ -1234,7 +1234,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     url = sequence["software_release_uri"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerSoftwareRelease(url)
     self.assertTrue(isinstance(computer, slap.SoftwareRelease))
 
@@ -1363,7 +1363,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertRaises(slap.NotFoundError, computer.getComputerPartitionList)
 
@@ -1373,7 +1373,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertEquals([], computer.getComputerPartitionList())
 
@@ -1441,7 +1441,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       computer = computer.getParentValue()
 
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     REMOTE_USER = computer.getReference()
     slap_computer_partition = self.slap.registerComputerPartition(
         computer.getReference(), computer_partition.getReference())
@@ -1468,7 +1468,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     requested_parameter_dict = sequence['requested_parameter_dict']
 
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1498,7 +1498,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     requested_parameter_dict = sequence['requested_parameter_dict']
 
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1515,7 +1515,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
 
   def stepRequestTwoAndCheckDifferentResult(self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1537,7 +1537,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
 
   def stepRequestComputerPartition(self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1560,7 +1560,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
 
   def stepRequestComputerPartitionNotFoundResponse(self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1922,7 +1922,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     computer_partition_list = computer.getComputerPartitionList()
     self.assertEquals(self.computer_partition_amount,
@@ -1935,7 +1935,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference_list"][0]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
     self.assertEquals(partition_id, computer_partition.getId())
@@ -1946,7 +1946,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     url = sequence["software_release_uri"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(url)
     self.assertEquals(url, software_release.getURI())
 
@@ -1958,7 +1958,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence.get("computer_reference", str(random()))
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertRaises(slap.Unauthorized, computer.getSoftwareReleaseList)
 
@@ -1969,7 +1969,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertRaises(slap.NotFoundError, computer.getSoftwareReleaseList)
 
@@ -1979,7 +1979,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertEquals([], computer.getSoftwareReleaseList())
 
@@ -1990,7 +1990,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     self.assertEquals(1, len(computer.getSoftwareReleaseList()))
     self.assertTrue(isinstance(computer.getSoftwareReleaseList()[0],
@@ -2077,7 +2077,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     url = sequence["software_release_uri"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(url)
 
     self.assertRaises(slap.NotFoundError, software_release.building)
@@ -2088,7 +2088,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2113,7 +2113,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepCheckNotFoundSoftwareReleaseBuildingCall(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(
         sequence['software_release_uri'])
     # Note: Hackish
@@ -2127,7 +2127,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2143,7 +2143,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(
         sequence['software_release_uri'])
     # Note: Hackish
@@ -2157,7 +2157,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2169,7 +2169,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepCheckSoftwareReleaseErrorCall(self, sequence, **kw):
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(
         sequence['software_release_uri'])
     # Note: Hackish
@@ -2183,7 +2183,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2199,7 +2199,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2216,7 +2216,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     url = sequence["software_release_uri"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(url)
 
     self.assertRaises(slap.NotFoundError, software_release.available)
@@ -2227,7 +2227,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2239,7 +2239,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2269,7 +2269,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     url = sequence["software_release_uri"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     software_release = self.slap.registerSoftwareRelease(url)
 
     self.assertRaises(slap.NotFoundError, software_release.error, "ErrorLog")
@@ -2280,7 +2280,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2316,7 +2316,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2329,7 +2329,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     """
     computer_guid = sequence["computer_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer = self.slap.registerComputer(computer_guid)
     software_release = computer.getSoftwareReleaseList()[0]
 
@@ -2345,7 +2345,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2359,7 +2359,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2373,7 +2373,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2468,7 +2468,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference_list"][0]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2533,7 +2533,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2550,7 +2550,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2568,7 +2568,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference_list"][0]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2581,7 +2581,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2594,7 +2594,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2607,7 +2607,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
     computer_partition.destroyed()
@@ -2620,7 +2620,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
     self.assertRaises(slap.NotFoundError, computer_partition.destroyed)
@@ -2632,7 +2632,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2647,7 +2647,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2665,7 +2665,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference_list"][0]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2676,7 +2676,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
     self.assertRaises(slap.NotFoundError, computer_partition.error, "ErrorLog")
@@ -2688,7 +2688,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
     computer_partition.error("ErrorLog")
@@ -2786,7 +2786,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2804,7 +2804,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference_list"][0]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2818,7 +2818,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2835,7 +2835,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2850,7 +2850,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2867,7 +2867,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2880,7 +2880,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -2978,7 +2978,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -3005,7 +3005,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -3018,7 +3018,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -3031,7 +3031,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -3045,7 +3045,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     partition_id = sequence.get("computer_partition_reference",
         sequence['computer_partition_reference_list'][0])
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -3060,7 +3060,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_guid, partition_id)
 
@@ -3452,7 +3452,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         partition_id)
     parameter_dict = computer_partition.getInstanceParameterDict()
@@ -3464,7 +3464,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_guid = sequence["computer_reference"]
     partition_id = sequence["computer_partition_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         partition_id)
     parameter_dict = computer_partition.getInstanceParameterDict()
@@ -3586,7 +3586,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     connection_dict = dict(site_url=site_url)
     slave_reference = sequence["software_instance_reference"]
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     computer_partition = self.slap.registerComputerPartition(
         computer_reference, computer_partition_reference)
     computer_partition.setConnectionDict(connection_dict)

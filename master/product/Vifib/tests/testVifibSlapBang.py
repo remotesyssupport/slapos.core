@@ -59,7 +59,7 @@ class TestVifibSlapBang(TestVifibSlapWebServiceMixin):
 
   def stepBang(self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -209,7 +209,7 @@ class TestVifibSlapBang(TestVifibSlapWebServiceMixin):
 
   def stepComputerBang(self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer = self.slap.registerComputer(
       sequence['computer_reference'])
     slap_computer.bang(self.bang_message)
