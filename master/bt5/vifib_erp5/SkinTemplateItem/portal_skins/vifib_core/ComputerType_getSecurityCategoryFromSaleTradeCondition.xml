@@ -84,7 +84,7 @@ for sale_supply_line in sale_supply_line_list:\n
         category_list.extend([x.getReference() for x in person.portal_catalog(\n
             portal_type="Open Sale Order",\n
             validation_state="validated",\n
-            destination_decision_value=person)])\n
+            destination_decision_relative_url=person.getRelativeUrl())])\n
     else:\n
       # Global\n
       public = 1\n
