@@ -535,7 +535,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPersonal
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
 
       # now this computer patrition request new one
