@@ -559,7 +559,9 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence.edit(
       test_vifib_admin_computer_reference=sequence['computer_reference'],
       test_vifib_admin_computer_partition_reference=sequence[
-        'computer_partition_reference']
+        'computer_partition_reference'],
+      test_vifib_admin_software_instance_reference=sequence[
+        'software_instance_reference']
     )
 
   def stepRestoreTestVifibAdminComputerPartitionCoordinate(self,
@@ -567,7 +569,9 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence.edit(
       computer_reference=sequence['test_vifib_admin_computer_reference'],
       computer_partition_reference=sequence[
-        'test_vifib_admin_computer_partition_reference']
+        'test_vifib_admin_computer_partition_reference'],
+        software_instance_reference=sequence[
+          'test_vifib_admin_software_instance_reference']
     )
 
   def test_allocation_scope_friend_software_instance_request(self):
