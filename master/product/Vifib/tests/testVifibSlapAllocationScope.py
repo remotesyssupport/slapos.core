@@ -1,5 +1,4 @@
 from Products.ERP5Type.tests.Sequence import SequenceList
-import random
 import unittest
 from testVifibSlapWebService import TestVifibSlapWebServiceMixin
 
