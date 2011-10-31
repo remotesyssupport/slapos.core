@@ -550,6 +550,8 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance
       RequestComputerPartition
       Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       SlapLogout
 
       LoginDefaultUser
@@ -558,6 +560,8 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       Logout
 
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
       CheckRequestedComputerPartitionCleanParameterList
       SlapLogout
     """
