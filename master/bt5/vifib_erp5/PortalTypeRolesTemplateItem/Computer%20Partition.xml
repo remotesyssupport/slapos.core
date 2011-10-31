@@ -1,0 +1,8 @@
+<type_roles>
+  <role id='Auditor'>
+   <property id='title'>Software Instance related by Hosting Subscription</property>
+   <property id='condition'>python: here.getSlapState() == "busy"</property>
+   <property id='base_category_script'>ERP5Type_getSecurityCategoryFromAggregateMovementItemByHostingSubscription</property>
+   <multi_property id='base_category'>aggregate</multi_property>
+  </role>
+</type_roles>
