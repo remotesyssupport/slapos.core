@@ -78,9 +78,10 @@ open_order = portal.portal_catalog.getResultValue(\n
   portal_type="Open Sale Order",\n
   validation_state="validated")\n
 computer_partition_relative_url = open_order.OpenSaleOrder_restrictMethodAsShadowUser(\n
-                                                open_order.OpenSaleOrder_findPartition,\n
-                                                software_release_url_string, software_instance.getSourceReference(),\n
-                                                software_instance.getPortalType(), software_instance.getSlaXmlAsDict())\n
+                                                open_order=open_order,\n
+                                                callable_object=open_order.OpenSaleOrder_findPartition,\n
+                                                argument_list=[software_release_url_string, software_instance.getSourceReference(),\n
+                                                software_instance.getPortalType(), software_instance.getSlaXmlAsDict()])\n
 \n
 sale_packing_list_line = context.HostingSubscription_getInstancePackingListLine(state_change)\n
 base_sale_packing_list = sale_packing_list_line.getParentValue()\n
