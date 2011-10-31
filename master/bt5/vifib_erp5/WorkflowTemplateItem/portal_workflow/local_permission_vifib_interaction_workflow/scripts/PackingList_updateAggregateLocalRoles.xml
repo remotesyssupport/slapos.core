@@ -54,7 +54,7 @@
 This script updates all local roles on the object. It requires Assignor\n
 proxy role since it may be called by owner in draft state.\n
 """\n
-portal_type_list = ["Software Instance", "Slave Instance", "Hosting Subscription"]\n
+portal_type_list = ["Software Instance", "Slave Instance", "Hosting Subscription", "Computer Partition"]\n
 for movement in state_change[\'object\'].getMovementList():\n
   tag = "softinssec_%s" % movement.getUid()\n
   movement.activate(tag=tag).immediateReindexObject()\n
