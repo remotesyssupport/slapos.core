@@ -555,8 +555,23 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
+  def stepStoreTestVifibAdminComputerPartitionCoordinate(self, sequence, **kw):
+    sequence.edit(
+      test_vifib_admin_computer_reference=sequence['computer_reference'],
+      test_vifib_admin_computer_partition_reference=sequence[
+        'computer_partition_reference']
+    )
+
+  def stepRestoreTestVifibAdminComputerPartitionCoordinate(self,
+    sequence, **kw):
+    sequence.edit(
+      computer_reference=sequence['test_vifib_admin_computer_reference'],
+      computer_partition_reference=sequence[
+        'test_vifib_admin_computer_partition_reference']
+    )
+
   def test_allocation_scope_friend_software_instance_request(self):
-    self.computer_partition_amount = 2
+    self.computer_partition_amount = 3
     sequence_list = SequenceList()
     sequence_string =  self.prepare_open_public_computer + """
       # request as friend
@@ -576,6 +591,8 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       CheckComputerPartitionInstanceSetupSalePackingListConfirmed
       Logout
 
+      StoreTestVifibAdminComputerPartitionCoordinate
+
       # request as someone else
       LoginTestVifibCustomerA
       PersonRequestSoftwareInstance
@@ -593,7 +610,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       CheckComputerPartitionInstanceSetupSalePackingListConfirmed
       Logout
 
-      # change allocation to personal
+      # change allocation to friend
       LoginTestVifibCustomer
       ComputerSetAllocationScopeOpenFriendTestVifibAdmin
       Tic
@@ -608,12 +625,30 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance
       RequestComputerPartitionNotFoundResponse
       SlapLogout
-      
+
       # now vifib_admin computer partition request new one and suceeds
+      RestoreTestVifibAdminComputerPartitionCoordinate
+
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
+      SlapLogout
+
+      LoginDefaultUser
+      CheckSoftwareInstanceAndRelatedComputerPartition
+      CheckRequestedSoftwareInstanceAndRelatedComputerPartition
+      Logout
+
+      SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRequestedComputerPartitionCleanParameterList
+      SlapLogout
     """
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
-    raise NotImplementedError
 
   def test_allocation_scope_close_software_instance_request(self):
     self.computer_partition_amount = 2
