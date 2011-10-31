@@ -30,6 +30,9 @@
 
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
+from AccessControl.SecurityManagement import getSecurityManager, \
+  newSecurityManager, setSecurityManager
+from Products.ERP5Security.ERP5UserManager import SUPER_USER
 from OFS.Traversable import NotFound
 from Products.DCWorkflow.DCWorkflow import ValidationFailed
 from Products.ERP5Type.Globals import InitializeClass
@@ -872,8 +875,14 @@ class SlapTool(BaseTool):
         return software_instance
 
   def _getSalePackingListLineAsSoftwareInstance(self, sale_packing_list_line):
-    merged_dict = sale_packing_list_line.\
-      SalePackinListLine_asSoftwareInstnaceComputerPartitionMergedDict()
+    sm = getSecurityManager()
+    try:
+      newSecurityManager(None, self.getPortalObject()\
+        .portal_membership.getMemberById(SUPER_USER))
+      merged_dict = sale_packing_list_line.\
+        SalePackinListLine_asSoftwareInstnaceComputerPartitionMergedDict()
+    finally:
+      setSecurityManager(sm)
     if merged_dict is None:
       LOG('SlapTool._getSalePackingListLineAsSoftwareInstance', INFO,
         '%s returned no information' % sale_packing_list_line.getRelativeUrl())
