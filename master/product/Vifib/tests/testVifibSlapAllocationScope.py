@@ -105,6 +105,13 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       uid=sequence['computer_uid'])
     trade_condition = computer.getAggregateRelatedValue(
       portal_type='Sale Supply Line').getParentValue()
+    self.assertEqual(trade_condition.getSubjectList(), [])
+
+  def stepCheckComputerTradeConditionSubjectListEmptyString(self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    trade_condition = computer.getAggregateRelatedValue(
+      portal_type='Sale Supply Line').getParentValue()
     self.assertEqual(trade_condition.getSubjectList(), [''])
 
   def stepCheckComputerTradeConditionSubjectListTestVifibAdmin(self, sequence,
@@ -363,7 +370,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPublic
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -431,7 +438,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -477,7 +484,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeEmpty
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -520,7 +527,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPublic
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
     """ + TestVifibSlapWebServiceMixin.prepare_published_software_release \
       + request_and_install_software
@@ -697,7 +704,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
 
       # now this computer patrition request new one
@@ -737,7 +744,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeEmpty
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
 
       # now this computer patrition request new one
@@ -839,7 +846,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
 
       # request start and check that it worked
