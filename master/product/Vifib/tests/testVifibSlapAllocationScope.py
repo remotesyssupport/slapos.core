@@ -44,14 +44,15 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       portal_type='Sale Supply Line').getParentValue()
     self.assertEqual(trade_condition.getSubjectList(), [''])
 
-  def stepCheckComputerTradeConditionSubjectListTestVifibAdmin(self, sequence,
-      **kw):
+  def stepCheckComputerTradeConditionSubjectListTestVifibAdminTestVifibCustomer(
+      self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
       uid=sequence['computer_uid'])
     trade_condition = computer.getAggregateRelatedValue(
       portal_type='Sale Supply Line').getParentValue()
-    self.assertEqual(trade_condition.getSubjectList(),
-      ['test_computer_vifib_admin@example.org'])
+    self.assertEqual(sorted(trade_condition.getSubjectList()),
+      sorted(['test_computer_vifib_admin@example.org',
+        'test_customer@example.org']))
 
   request_and_install_software = """
       LoginTestVifibCustomer
@@ -200,7 +201,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenFriend
-      CheckComputerTradeConditionSubjectListTestVifibAdmin
+      CheckComputerTradeConditionSubjectListTestVifibAdminTestVifibCustomer
       Logout
     """ + self.prepare_published_software_release + \
       self.request_and_install_software + """
@@ -591,7 +592,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenFriend
-      CheckComputerTradeConditionSubjectListTestVifibAdmin
+      CheckComputerTradeConditionSubjectListTestVifibAdminTestVifibCustomer
       Logout
 
       # now this computer patrition request new one
