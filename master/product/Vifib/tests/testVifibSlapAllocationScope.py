@@ -466,7 +466,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPublic
-      CheckComputerTradeConditionSubjectListEmpty
+      CheckComputerTradeConditionSubjectListEmptyString
       Logout
     """ + TestVifibSlapWebServiceMixin.prepare_published_software_release \
       + request_and_install_software
