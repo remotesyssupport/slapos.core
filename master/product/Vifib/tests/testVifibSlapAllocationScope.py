@@ -44,6 +44,15 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       portal_type='Sale Supply Line').getParentValue()
     self.assertEqual(trade_condition.getSubjectList(), [''])
 
+  def stepCheckComputerTradeConditionSubjectListTestVifibCustomer(
+      self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    trade_condition = computer.getAggregateRelatedValue(
+      portal_type='Sale Supply Line').getParentValue()
+    self.assertEqual(trade_condition.getSubjectList(),
+      ['test_customer@example.org'])
+
   def stepCheckComputerTradeConditionSubjectListTestVifibAdminTestVifibCustomer(
       self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
@@ -535,7 +544,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeOpenPersonal
-      CheckComputerTradeConditionSubjectListEmptyString
+      CheckComputerTradeConditionSubjectListTestVifibCustomer
       Logout
 
       # now this computer patrition request new one
