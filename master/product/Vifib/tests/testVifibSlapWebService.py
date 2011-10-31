@@ -728,7 +728,10 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
 
   prepare_computer = """
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
   """
@@ -994,7 +997,10 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       """ 
 
   computer_with_software_release = """
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       CreatePurchasePackingList
       Tic
@@ -1070,7 +1076,10 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   prepare_another_computer_sequence_string = """
     StoreComputerReference
     LoginTestVifibAdmin
-    CreateComputer
+    CustomerRegisterNewComputer
+    Tic
+    SetComputerCoordinatesFromComputerTitle
+    ComputerSetAllocationScopeOpenPublic
     Tic
     Logout
 
