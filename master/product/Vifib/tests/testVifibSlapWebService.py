@@ -3565,12 +3565,17 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_partition = self.slap.registerComputerPartition(computer_guid,
         partition_id)
     parameter_dict = computer_partition.getInstanceParameterDict()
-    self.assertEquals("RootSoftwareInstance",
+    self.assertEquals(
+        sequence.get('requested_software_type',
+                     'requested_software_type'),
         parameter_dict["slap_software_type"])
     slave_instance_list = parameter_dict["slave_instance_list"]
     self.assertEquals(expected_amount, len(slave_instance_list))
     for slave_instance in slave_instance_list:
-      self.assertEquals("SlaveInstance", slave_instance["slap_software_type"])
+      self.assertEquals(
+          sequence.get('requested_software_type',
+                       'requested_software_type'),
+          slave_instance["slap_software_type"])
 
   def stepCheckTwoSlaveInstanceListFromOneComputerPartition(self, sequence):
     self.stepCheckSlaveInstanceListFromOneComputerPartition(sequence, 
