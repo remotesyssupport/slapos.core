@@ -59,18 +59,24 @@ computer.edit(\n
 \n
 sale_supply_line = computer.Computer_getRelatedSaleSupplyLine()\n
 sale_trade_condition = sale_supply_line.getParentValue()\n
-self_email = portal.ERP5Site_getAuthenticatedMemberPersonValue().getDefaultEmailCoordinateText()\n
-if len(subject_list) == 0:\n
-  if allocation_scope == \'open/public\':\n
-    subject_list = [\'\']\n
-  else:\n
-    subject_list = [self_email]\n
+self_person = portal.ERP5Site_getAuthenticatedMemberPersonValue()\n
+self_email = self_person.getDefaultEmailCoordinateText()\n
+if allocation_scope == \'open/public\':\n
+  # reset friends and update in place\n
+  sale_trade_condition.edit(\n
+    subject_list=[\'\'])\n
+  sale_trade_condition.setDestinationSection(None)\n
+elif allocation_scope == \'open/personal\':\n
+  # reset friends to self and update in place\n
+  sale_trade_condition.edit(\n
+    subject_list=[self_email])\n
+  sale_trade_condition.setDestinationSection(self_person)\n
 else:\n
-  # add self as friend\n
   if self_email not in subject_list:\n
+    # add self as friend\n
     subject_list.append(self_email)\n
-sale_trade_condition.edit(\n
-  subject_list=subject_list)\n
+  sale_trade_condition.edit(\n
+    subject_list=subject_list)\n
 \n
 message = context.Base_translateString("Allocation scope updated!")\n
 return computer.Base_redirect(keep_items={\'portal_status_message\': message})\n
