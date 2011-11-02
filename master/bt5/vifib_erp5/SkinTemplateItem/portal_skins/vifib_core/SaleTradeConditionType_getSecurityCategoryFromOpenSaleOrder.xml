@@ -73,7 +73,7 @@ for person in person_list:\n
   for open_order in portal.portal_catalog(\n
       portal_type="Open Sale Order",\n
       validation_state="validated",\n
-      destination_decision_value=person):\n
+      destination_decision_relative_url=person.getRelativeUrl()):\n
     category_list.append(open_order)\n
 \n
 if category_list:\n
