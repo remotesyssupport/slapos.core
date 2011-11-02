@@ -60,8 +60,8 @@ if open_order is None:\n
   person_slap_interface_state = person.getSlapState()\n
   if person_slap_interface_state != \'open_order_created\':\n
     open_order = portal.open_sale_order_module.newContent(\n
-          destination_section_uid=person.getUid(),\n
-          destination_decision_uid=person.getUid(),\n
+          destination_section=person.getRelativeUrl(),\n
+          destination_decision=person.getRelativeUrl(),\n
           title="ViFiB Open Order")\n
     person.createOpenOrder(open_order_url=open_order.getRelativeUrl())\n
     open_order.order()\n
