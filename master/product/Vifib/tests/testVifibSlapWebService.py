@@ -3394,7 +3394,11 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepSetCurrentSoftwareInstanceRequested(self, sequence):
     sequence.edit(
       requester_software_instance_uid=sequence['software_instance_uid'],
+      requester_software_instance_reference=sequence[
+        'software_instance_reference'],
       software_instance_uid=sequence['requested_software_instance_uid'],
+      software_instance_reference=sequence[
+        'requested_software_instance_reference']
     )
 
   def stepSetCurrentSoftwareInstanceRequester(self, sequence):
