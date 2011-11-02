@@ -361,7 +361,8 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   def stepPersonRequestSlaveInstance(self, sequence, **kw):
     kw = dict(instance_portal_type=self.slave_instance_portal_type,
               shared=True,
-              software_type="SlaveInstance")
+              software_type=sequence.get('requested_software_type',
+                                         'requested_software_type'))
     self.stepPersonRequestSoftwareInstance(sequence, **kw)
 
   def stepPersonRequestSoftwareInstance(self, sequence, **kw):
@@ -369,6 +370,11 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     software_release = self.portal.portal_catalog.getResultValue(
         uid=sequence['software_release_uid'])
     software_title = self.id() + str(random())
+
+    if 'software_type' not in kw:
+      kw['software_type'] = sequence.get('requested_software_type',
+                                         'requested_software_type')
+
     person.requestSoftwareInstance(
       software_release=software_release.getUrlString(),
       software_title=software_title,
@@ -1555,7 +1561,8 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
 
     requested_slap_computer_partition = slap_computer_partition.request(
         software_release=software_release_uri,
-        software_type="SlaveInstance",
+        software_type=sequence.get('requested_software_type',
+                                   'requested_software_type'),
         partition_reference=requested_reference,
         partition_parameter_kw=requested_parameter_dict,
         # XXX The follow API should be slave, but shared was kept for
@@ -1586,7 +1593,8 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     self.assertRaises(slap.NotFoundError, 
       slap_computer_partition.request,
       software_release=software_release_uri,
-      software_type="SlaveInstance",
+      software_type=sequence.get('requested_software_type',
+                                 'requested_software_type'),
       partition_reference=requested_reference,
       partition_parameter_kw=requested_parameter_dict,
       shared=True, 
