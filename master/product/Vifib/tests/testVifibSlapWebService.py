@@ -739,6 +739,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       SetComputerCoordinatesFromComputerTitle
       ComputerSetAllocationScopeOpenPublic
       Tic
+      CheckComputerTradeConditionDestinationSectionListEmpty
       Logout
   """
 
@@ -1140,6 +1141,14 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   ########################################
   # Steps
   ########################################
+
+  def stepCheckComputerTradeConditionDestinationSectionListEmpty(self,
+      sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    trade_condition = computer.getAggregateRelatedValue(
+      portal_type='Sale Supply Line').getParentValue()
+    self.assertEqual(trade_condition.getDestinationSectionList(), [])
 
   def stepCheckSuccessSlapRegisterComputerCall(self, sequence, **kw):
     """

@@ -29,13 +29,6 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
       uid=sequence['computer_uid'])
     self.assertEqual(computer.getAllocationScope(), 'open/public')
 
-  def stepCheckComputerTradeConditionDestinationSectionListEmpty(self, sequence, **kw):
-    computer = self.portal.portal_catalog.getResultValue(
-      uid=sequence['computer_uid'])
-    trade_condition = computer.getAggregateRelatedValue(
-      portal_type='Sale Supply Line').getParentValue()
-    self.assertEqual(trade_condition.getDestinationSectionList(), [])
-
   def stepCheckComputerTradeConditionDestinationSectionTestVifibCustomer(
       self, sequence, **kw):
     computer = self.portal.portal_catalog.getResultValue(
