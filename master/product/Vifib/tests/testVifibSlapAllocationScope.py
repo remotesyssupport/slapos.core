@@ -825,7 +825,7 @@ class TestVifibSlapAllocationScope(TestVifibSlapWebServiceMixin):
 
       LoginDefaultUser
       CheckComputerAllocationScopeClose
-      CheckComputerTradeConditionDestinationSectionListEmpty
+      CheckComputerTradeConditionDestinationSectionTestVifibCustomer
       Logout
 
       # request start and check that it worked
