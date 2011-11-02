@@ -303,7 +303,7 @@ class TestVifibSlapComputerGetComputerPartitionList(TestVifibSlapWebServiceMixin
       SlapLogout \
       \
       LoginDefaultUser \
-      SetDeliveryLineAmountEqualOne \
+      SetDeliveryLineAmountEqualTwo \
       CheckComputerPartitionInstanceHostingSalePackingListStarted \
       Logout \
       \
@@ -318,6 +318,7 @@ class TestVifibSlapComputerGetComputerPartitionList(TestVifibSlapWebServiceMixin
       LoginDefaultUser \
       ConfirmOrderedSaleOrderActiveSense \
       Tic \
+      SetDeliveryLineAmountEqualOne \
       CheckComputerPartitionInstanceSetupSalePackingListConfirmed \
       Logout \
       \
