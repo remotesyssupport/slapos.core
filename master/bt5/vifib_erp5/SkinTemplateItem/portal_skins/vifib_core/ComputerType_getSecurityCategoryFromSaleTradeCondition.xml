@@ -65,30 +65,29 @@ if obj is None:\n
 \n
 portal = obj.getPortalObject()\n
 \n
-sale_supply_line_list = portal.portal_catalog(\n
-  aggregate_relative_url=obj.getRelativeUrl(),\n
-  portal_type="Sale Supply Line",\n
-  validation_state="validated")\n
-\n
 category_list = []\n
 public = 0\n
 \n
-for sale_supply_line in sale_supply_line_list:\n
-  sale_supply_line = sale_supply_line.getObject()\n
-  sale_trade_condition = sale_supply_line.getParentValue()\n
-  if sale_trade_condition.getPortalType() == \'Sale Trade Condition\':\n
+if obj.getAllocationScope() == \'open/public\':\n
+  public = 1\n
+else:\n
+  public = 0\n
+  sale_supply_line_list = portal.portal_catalog(\n
+    aggregate_relative_url=obj.getRelativeUrl(),\n
+    portal_type="Sale Supply Line",\n
+    validation_state="validated")\n
+  for sale_supply_line in sale_supply_line_list:\n
+    sale_supply_line = sale_supply_line.getObject()\n
+    sale_trade_condition = sale_supply_line.getParentValue()\n
+    if sale_trade_condition.getPortalType() == \'Sale Trade Condition\':\n
 \n
-    person_list = sale_supply_line.getDestinationSectionValueList(portal_type="Person")\n
-    if person_list:\n
-      for person in person_list:\n
-        category_list.extend([x.getReference() for x in person.portal_catalog(\n
-            portal_type="Open Sale Order",\n
-            validation_state="validated",\n
-            destination_decision_relative_url=person.getRelativeUrl())])\n
-    else:\n
-      # Global\n
-      public = 1\n
-      break\n
+      person_list = sale_supply_line.getDestinationSectionValueList(portal_type="Person")\n
+      if person_list:\n
+        for person in person_list:\n
+          category_list.extend([x.getReference() for x in person.portal_catalog(\n
+              portal_type="Open Sale Order",\n
+              validation_state="validated",\n
+              destination_decision_relative_url=person.getRelativeUrl())])\n
 \n
 if public:\n
   return {"Auditor": ["R-SHADOW"]}\n
