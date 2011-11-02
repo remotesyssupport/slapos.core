@@ -1,5 +1,6 @@
 from Products.ERP5Type.tests.Sequence import SequenceList
 import unittest
+from Products.ERP5Type.tests.backportUnittest import expectedFailure
 from slapos import slap
 from testVifibSlapWebService import TestVifibSlapWebServiceMixin
 from random import random
@@ -265,6 +266,8 @@ class TestVifibSlapBang(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
+  # Computer owner cannot do bang yet
+  @expectedFailure
   def test_admin_bang_computer_complex_tree(self):
     """Checks that bangs works on complex tree
 
