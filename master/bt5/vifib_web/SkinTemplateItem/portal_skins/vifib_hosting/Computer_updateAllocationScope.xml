@@ -64,13 +64,13 @@ self_email = self_person.getDefaultEmailCoordinateText()\n
 if allocation_scope == \'open/public\':\n
   # reset friends and update in place\n
   sale_trade_condition.edit(\n
-    subject_list=[\'\'])\n
-  sale_trade_condition.setDestinationSection(None)\n
+    subject_list=[\'\'],\n
+    destination_section=None)\n
 elif allocation_scope == \'open/personal\':\n
   # reset friends to self and update in place\n
   sale_trade_condition.edit(\n
-    subject_list=[self_email])\n
-  sale_trade_condition.setDestinationSection(self_person)\n
+    subject_list=[self_email],\n
+    destination_section_value=self_person)\n
 else:\n
   if self_email not in subject_list:\n
     # add self as friend\n
