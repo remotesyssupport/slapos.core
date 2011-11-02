@@ -1474,10 +1474,14 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
 
   def stepSelectYetAnotherRequestedReference(self, sequence, **kw):
     sequence.edit(requested_reference='yet_another_requested_reference')
+
+  def stepSelectYetAnotherRequestedSoftwareType(self, sequence, **kw):
     sequence.edit(requested_software_type='yet_another_requested_software_type')
 
   def stepSelectAnotherRequestedReference(self, sequence, **kw):
     sequence.edit(requested_reference='another_requested_reference')
+
+  def stepSelectAnotherRequestedSoftwareType(self, sequence, **kw):
     sequence.edit(requested_software_type='another_requested_software_type')
 
   def stepSelectRequestedReference(self, sequence, **kw):
