@@ -318,6 +318,7 @@ class TestVifibSlapComputerGetComputerPartitionList(TestVifibSlapWebServiceMixin
       LoginDefaultUser \
       ConfirmOrderedSaleOrderActiveSense \
       Tic \
+      CheckComputerPartitionInstanceSetupSalePackingListConfirmed \
       Logout \
       \
       SlapLoginCurrentComputer \
