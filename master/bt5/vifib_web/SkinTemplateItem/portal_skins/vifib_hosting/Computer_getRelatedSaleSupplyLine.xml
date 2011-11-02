@@ -53,7 +53,7 @@
             <value> <string>computer = context\n
 return computer.portal_catalog.getResultValue(\n
   portal_type="Sale Supply Line",\n
-  aggregate_value=computer,\n
+  aggregate_relative_url=computer.getRelativeUrl(),\n
   validation_state="validated")\n
 </string> </value>
         </item>
