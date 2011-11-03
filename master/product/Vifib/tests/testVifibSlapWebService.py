@@ -374,13 +374,14 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     if 'software_type' not in kw:
       kw['software_type'] = sequence.get('requested_software_type',
                                          'requested_software_type')
+    if 'state' not in kw:
+      kw['state'] = sequence.get('software_instance_state'),
 
     person.requestSoftwareInstance(
       software_release=software_release.getUrlString(),
       software_title=software_title,
       instance_xml=self.minimal_correct_xml,
       sla_xml=sequence.get('sla_xml'),
-      state=sequence.get('software_instance_state'),
       **kw)
     transaction.commit()
     self.tic()
