@@ -222,7 +222,6 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       portal_type=self.sale_packing_list_line_portal_type,
       simulation_state=state,
       resource_relative_url=resource)]
-    import pdb; pdb.set_trace()
     self.assertEqual(delivery_line_amount, len(delivery_line_list))
 
   def _checkComputerPartitionNoSalePackingList(self, resource, sequence):
