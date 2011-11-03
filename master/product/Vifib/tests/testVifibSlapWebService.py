@@ -375,7 +375,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       kw['software_type'] = sequence.get('requested_software_type',
                                          'requested_software_type')
     if 'state' not in kw:
-      kw['state'] = sequence.get('software_instance_state'),
+      kw['state'] = sequence.get('software_instance_state')
 
     person.requestSoftwareInstance(
       software_release=software_release.getUrlString(),
