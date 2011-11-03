@@ -26,10 +26,6 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
-  # XXX: This test fails because test_vifib_customer security is cached
-  #      and this user is not in SOFTINST-x group. We do not want to clear
-  #      cache in tests.
-  @expectedFailure
   def test_ComputerPartition_request_noParameterInRequest(self):
     """
     Check that it is possible to request another Computer Partition
