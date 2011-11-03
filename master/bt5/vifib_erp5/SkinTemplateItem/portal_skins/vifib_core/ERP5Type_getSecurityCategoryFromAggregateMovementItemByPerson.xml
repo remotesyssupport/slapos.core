@@ -50,41 +50,62 @@
         </item>
         <item>
             <key> <string>_body</string> </key>
-            <value> <string>"""\n
-Core security script - defines the way to get security groups of the current user.\n
+            <value> <string encoding="cdata"><![CDATA[
+
+# XXX For now, this script requires proxy manager\n
 \n
-WARNING: providing such script in erp5_dms could be dangerous\n
-if this conflicts with an existing production site which uses\n
-deprecated ERP5Type_asSecurityGroupIdList\n
-"""\n
+# base_category_list : list of category values we need to retrieve\n
+# user_name : string obtained from getSecurityManager().getUser().getUserName() [NuxUserGroup]\n
+#             or from getSecurityManager().getUser().getId() [PluggableAuthService with ERP5GroupManager]\n
+# object : object which we want to assign roles to.\n
+# portal_type : portal type of object\n
 \n
-return (\n
-  # Person security\n
-  (\'ERP5Type_getSecurityCategoryFromAssignment\', [\'function\', \'group\']),\n
-  (\'ERP5Type_getSecurityCategoryFromAssignment\', [\'role\']),\n
-  # (\'ERP5Type_getPersonSecurityFromHostingSubscription\', [\'aggregate\']),\n
+# must always return a list of dicts\n
 \n
-  # Computer security\n
-  (\'ERP5Type_getComputerSecurityCategory\', [\'role\']),\n
+category_list = []\n
 \n
-  # Instance security\n
-  (\'ERP5Type_getSoftwareInstanceSecurityCategory\', [\'role\']),\n
-  (\'ERP5Type_getSoftwareInstanceSecurityCategory\', [\'aggregate\']),\n
+if obj is None:\n
+  return []\n
 \n
-  # Person + Instance additional secutity\n
-  (\'ERP5Type_getSecurityCategoryForPersonSoftwareInstance\', [\'role\']),\n
-  (\'ERP5Type_getSecurityCategoryFromRelatedOpenOrder\', [\'aggregate\']),\n
+movement_portal_type = "Sale Packing List Line"\n
 \n
-)\n
-</string> </value>
+portal = obj.getPortalObject()\n
+\n
+security_dict = {}\n
+\n
+parent_url_list = []\n
+for movement in portal.portal_catalog(\n
+  portal_type=movement_portal_type,\n
+  aggregate_uid=obj.getUid(),\n
+  simulation_state=portal.getPortalCurrentInventoryStateList() + portal.getPortalReservedInventoryStateList() + portal.getPortalTransitInventoryStateList(),\n
+  ):\n
+  item = movement.getDestinationSectionValue(portal_type="Person")\n
+  if item is not None:\n
+    parent_url_list.append(item.getRelativeUrl())\n
+\n
+if len(parent_url_list) > 0:\n
+  parent_url_list.sort()\n
+  category_list.append({"destination_section": parent_url_list})\n
+return category_list\n
+
+
+]]></string> </value>
         </item>
         <item>
             <key> <string>_params</string> </key>
-            <value> <string></string> </value>
+            <value> <string>base_category_list, user_name, obj, portal_type</string> </value>
+        </item>
+        <item>
+            <key> <string>_proxy_roles</string> </key>
+            <value>
+              <tuple>
+                <string>Manager</string>
+              </tuple>
+            </value>
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>ERP5Type_getSecurityCategoryMapping</string> </value>
+            <value> <string>ERP5Type_getSecurityCategoryFromAggregateMovementItemByPerson</string> </value>
         </item>
       </dictionary>
     </pickle>

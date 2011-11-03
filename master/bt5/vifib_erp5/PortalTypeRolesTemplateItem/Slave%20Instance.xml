@@ -5,9 +5,9 @@
    <multi_property id='base_category'>aggregate</multi_property>
   </role>
   <role id='Assignee'>
-   <property id='title'>Owner become Assignee</property>
-   <property id='base_category_script'>ERP5Type_acquireSecurityFromOwner</property>
-   <multi_property id='base_category'>source</multi_property>
+   <property id='title'>Customer of the Instance</property>
+   <property id='base_category_script'>ERP5Type_getSecurityCategoryFromAggregateMovementItemByPerson</property>
+   <multi_property id='base_category'>destination_section</multi_property>
   </role>
   <role id='Assignee'>
    <property id='title'>Slave Instance related by Software Instance</property>
