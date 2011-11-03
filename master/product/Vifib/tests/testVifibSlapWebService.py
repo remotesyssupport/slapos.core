@@ -206,10 +206,10 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
       sequence):
     computer_partition = self.portal.portal_catalog.getResultValue(
         uid=sequence['computer_partition_uid'])
-    delivery_line_list = [q for q in computer_partition
-        .getAggregateRelatedValueList(
-          portal_type=self.sale_packing_list_line_portal_type)
-        if q.getResource() == resource]
+    delivery_line_list = [q.getObject() for q in self.portal.portal_catalog(
+      aggregate_relative_url=computer_partition.getRelativeUrl(),
+      portal_type=self.sale_packing_list_line_portal_type,
+      resource_relative_url=resource)]
     self.assertEqual(0, len(delivery_line_list))
 
   def _checkComputerPartitionSalePackingListState(self, state,
@@ -217,20 +217,21 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     delivery_line_amount = sequence.get("delivery_line_amount", 1)
     computer_partition = self.portal.portal_catalog.getResultValue(
         uid=sequence['computer_partition_uid'])
-    delivery_line_list = [q for q in computer_partition
-        .getAggregateRelatedValueList(
-          portal_type=self.sale_packing_list_line_portal_type)
-        if q.getResource() == resource
-        and q.getSimulationState() == state]
+    delivery_line_list = [q.getObject() for q in self.portal.portal_catalog(
+      aggregate_relative_url=computer_partition.getRelativeUrl(),
+      portal_type=self.sale_packing_list_line_portal_type,
+      simulation_state=state,
+      resource_relative_url=resource)]
+    import pdb; pdb.set_trace()
     self.assertEqual(delivery_line_amount, len(delivery_line_list))
 
   def _checkComputerPartitionNoSalePackingList(self, resource, sequence):
     computer_partition = self.portal.portal_catalog.getResultValue(
         uid=sequence['computer_partition_uid'])
-    delivery_line_list = [q for q in computer_partition
-        .getAggregateRelatedValueList(
-          portal_type=self.sale_packing_list_line_portal_type)
-        if q.getResource() == resource]
+    delivery_line_list = [q.getObject() for q in self.portal.portal_catalog(
+      aggregate_relative_url=computer_partition.getRelativeUrl(),
+      portal_type=self.sale_packing_list_line_portal_type,
+      resource_relative_url=resource)]
     self.assertEqual(0, len(delivery_line_list))
 
   def stepCheckComputerPartitionInstanceCleanupSalePackingListDoesNotExists(self,
