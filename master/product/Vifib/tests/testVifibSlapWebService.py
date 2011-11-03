@@ -2994,7 +2994,9 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
         'slap_computer_partition_id': partition_id,
         'slap_server_url': self.server_url,
         'slap_software_release_url': software_release_uri,
-        'slap_software_type': 'RootSoftwareInstance',
+        'slap_software_type': 
+          sequence.get('requested_software_type',
+                       'requested_software_type'),
         'slave_instance_list': [],
         'ip_list': [],
     }
