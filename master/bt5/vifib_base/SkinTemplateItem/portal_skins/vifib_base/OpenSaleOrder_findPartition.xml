@@ -55,37 +55,6 @@
 import random\n
 open_sale_order = context\n
 \n
-def checkSoftwareInstanceIsInstalledOnComputerPartition(software_release_url,\n
-    computer_partition):\n
-  portal = context.getPortalObject()\n
-  from Products.ZSQLCatalog.SQLCatalog import Query, ComplexQuery\n
-  resource_relative_url = (\n
-      portal.portal_preferences.getPreferredInstanceSetupResource(),\n
-      portal.portal_preferences.getPreferredInstanceHostingResource(),\n
-  )\n
-  query = ComplexQuery(Query(aggregate_relative_url=software_release_url),\n
-                       Query(aggregate_relative_url=computer_partition.getRelativeUrl()),\n
-                       operator="AND",\n
-                      )\n
-  sale_packing_list_line_list = portal.portal_catalog(\n
-    portal_type=\'Sale Packing List Line\',\n
-    query=query,\n
-    resource_relative_url=resource_relative_url,\n
-    limit=1)\n
-  \n
-  if len(sale_packing_list_line_list) == 1:\n
-    resource_relative_url = (\n
-      portal.portal_preferences.getPreferredInstanceCleanupResource(),\n
-    )\n
-    sale_packing_list_line_list = portal.portal_catalog(\n
-      portal_type=\'Sale Packing List Line\',\n
-      query=query,\n
-      resource_relative_url=resource_relative_url,\n
-      limit=1)\n
-    if len(sale_packing_list_line_list) == 0:\n
-      return True\n
-  return False\n
-\n
 computer_partition = None\n
 query_kw = {\n
   \'software_release_url\': software_release_url,\n
@@ -123,8 +92,7 @@ for computer_partition_candidate in context.portal_catalog(\n
       computer_partition = computer_partition_candidate\n
       computer_partition.markBusy()\n
       break\n
-  elif computer_partition_candidate.getSlapState() == "busy" and \\\n
-    checkSoftwareInstanceIsInstalledOnComputerPartition(software_release_url, computer_partition_candidate):\n
+  elif computer_partition_candidate.getSlapState() == "busy":\n
     # Only assign slave instance on busy partition\n
     computer_partition = computer_partition_candidate\n
     break\n
