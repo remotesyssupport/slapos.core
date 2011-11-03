@@ -3501,7 +3501,7 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     self.assertEquals("confirmed", sale_order_line.getSimulationState())
     sale_packing_list_line = slave_instance.getAggregateRelatedValue(
         portal_type=self.sale_packing_list_line_portal_type)
-    self.assertNotEquals(sale_packing_list_line.getAggregateValue(
+    self.assertNotEquals(sale_packing_list_line.getAggregate(
       portal_type=self.computer_partition_portal_type), None)
 
   def stepCheckSlaveInstanceAssociationWithSoftwareInstance(self, sequence):
@@ -3532,13 +3532,11 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
         portal_type=self.software_release_portal_type)
     sale_packing_list_line_list = software_release.aggregateRelatedValues(
         portal_type=self.sale_packing_list_line_portal_type)
-    computer_partition_list = [obj.getAggregateValue(
+    computer_partition_list = [obj.getAggregate(
       portal_type=self.computer_partition_portal_type)\
           for obj in sale_packing_list_line_list]
     self.assertEquals(computer_partition_list[0],
         computer_partition_list[1])
-    self.assertEquals(computer_partition_list[0].getReference(),
-        computer_partition_list[1].getReference())
     self.assertEquals(2, len(computer_partition_list))
 
   def stepCheckSlaveInstanceNotReady(self, sequence):
