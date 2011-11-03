@@ -4253,7 +4253,7 @@ class TestVifibSlapWebService(TestVifibSlapWebServiceMixin):
       CheckComputerPartitionInstanceHostingSalePackingListStopped
       CheckComputerPartitionInstanceCleanupSalePackingListConfirmed
 
-      SlapLoginSoftwareInstanceFromCurrentSoftwareInstance
+      SlapLoginCurrentComputer
       SoftwareInstanceDestroyed
       Tic
       CheckComputerPartitionInstanceHostingSalePackingListStopped
