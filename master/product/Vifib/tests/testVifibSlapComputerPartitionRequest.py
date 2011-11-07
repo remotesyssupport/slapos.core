@@ -26,10 +26,6 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
     sequence_list.addSequenceString(sequence_string)
     sequence_list.play(self)
 
-  # XXX: This test fails because test_vifib_customer security is cached
-  #      and this user is not in SOFTINST-x group. We do not want to clear
-  #      cache in tests.
-  @expectedFailure
   def test_ComputerPartition_request_noParameterInRequest(self):
     """
     Check that it is possible to request another Computer Partition
@@ -42,6 +38,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       RequestComputerPartition \
       Tic \
+      CheckRaisesNotFoundComputerPartitionParameterDict \
+      Tic \
       SlapLogout \
       \
       LoginDefaultUser \
@@ -50,6 +48,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout \
       \
       SlapLoginCurrentSoftwareInstance \
+      RequestComputerPartition \
+      Tic \
       CheckRequestedComputerPartitionCleanParameterList \
       SlapLogout \
       \
@@ -76,6 +76,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       RequestComputerPartition \
       Tic \
+      CheckRaisesNotFoundComputerPartitionParameterDict \
+      Tic \
       SlapLogout \
       \
       LoginDefaultUser \
@@ -84,8 +86,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout \
       \
       SlapLoginCurrentSoftwareInstance \
+      RequestComputerPartition \
+      Tic \
       CheckRequestedComputerPartitionCleanParameterList \
-      Logout \
+      SlapLogout \
       \
       LoginDefaultUser \
       SetCurrentSoftwareInstanceRequested \
@@ -139,6 +143,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       RequestComputerPartition \
       Tic \
+      CheckRaisesNotFoundComputerPartitionParameterDict \
+      Tic \
       SlapLogout \
       \
       LoginDefaultUser \
@@ -147,8 +153,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout \
       \
       SlapLoginCurrentSoftwareInstance \
+      RequestComputerPartition \
+      Tic \
       CheckRequestedComputerPartitionCleanParameterList \
-      Logout \
+      SlapLogout \
       \
       LoginDefaultUser \
       SetCurrentSoftwareInstanceRequested \
@@ -198,6 +206,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       RequestComputerPartition \
       Tic \
+      CheckRaisesNotFoundComputerPartitionParameterDict \
+      Tic \
       SlapLogout \
       \
       LoginDefaultUser \
@@ -206,8 +216,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout \
       \
       SlapLoginCurrentSoftwareInstance \
+      RequestComputerPartition \
+      Tic \
       CheckRequestedComputerPartitionCleanParameterList \
-      Logout \
+      SlapLogout \
       \
       LoginDefaultUser \
       SetCurrentSoftwareInstanceRequested \
@@ -281,8 +293,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
     request_dict = { 'computer_id': sequence['computer_reference'] ,
         'computer_partition_id': sequence['computer_partition_reference'],
         'software_release': sequence['software_release_uri'],
-        'software_type': sequence.get('requested_reference', 'requested_reference'),
-        'partition_reference': sequence.get('requested_reference', 'requested_reference'),
+        'software_type': sequence.get('requested_software_type',
+          'requested_software_type'),
+        'partition_reference': sequence.get('requested_reference',
+          'requested_reference'),
         'shared_xml': xml_marshaller.dumps(kw.get("shared", False)),
         'partition_parameter_xml': xml_marshaller.dumps({}),
         'filter_xml': xml_marshaller.dumps({}),
@@ -410,6 +424,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       RequestComputerPartition \
       Tic \
+      CheckRaisesNotFoundComputerPartitionParameterDict \
+      Tic \
       SlapLogout \
       \
       LoginDefaultUser \
@@ -418,6 +434,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout \
       \
       SlapLoginCurrentSoftwareInstance \
+      RequestComputerPartition \
+      Tic \
       CheckRequestedComputerPartitionRequestedParameter \
       SlapLogout \
     '
@@ -437,6 +455,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       RequestComputerPartition \
       Tic \
+      CheckRaisesNotFoundComputerPartitionParameterDict \
+      Tic \
       SlapLogout \
       \
       LoginDefaultUser \
@@ -445,6 +465,8 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout \
       \
       SlapLoginCurrentSoftwareInstance \
+      RequestComputerPartition \
+      Tic \
       CheckRequestedComputerPartitionCleanParameterList \
       SlapLogout \
       \
@@ -505,6 +527,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance
       RequestComputerPartition
       Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
+      RequestComputerPartition
+      Tic
       SlapLogout
 
       LoginDefaultUser
@@ -529,6 +555,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout
 
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       RequestComputerPartition
       Tic
       SlapLogout
@@ -614,6 +644,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance
       RequestComputerPartition
       Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
+      RequestComputerPartition
+      Tic
       SlapLogout
 
       LoginDefaultUser
@@ -626,6 +660,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       Logout
 
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       RequestComputerPartition
       Tic
       SlapLogout
@@ -798,6 +836,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
        SlapLoginCurrentSoftwareInstance
        SelectEmptyRequestedParameterDict
        SetRandomRequestedReference
+       RequestSlaveInstanceFromComputerPartition
+       Tic
+       CheckRaisesNotFoundComputerPartitionParameterDict
+       Tic
        RequestSlaveInstanceFromComputerPartition
        Tic
        SlapLogout
@@ -1022,7 +1064,7 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
 
   def stepRequestComputerPartitionWithAnotherSoftwareType(self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1039,7 +1081,7 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
   def stepCheckRequestComputerPartitionWithAnotherSoftwareType(
                                      self, sequence, **kw):
     self.slap = slap.slap()
-    self.slap.initializeConnection(self.server_url)
+    self.slap.initializeConnection(self.server_url, timeout=None)
     slap_computer_partition = self.slap.registerComputerPartition(
         sequence['computer_reference'],
         sequence['computer_partition_reference'])
@@ -1074,6 +1116,10 @@ class TestVifibSlapComputerPartitionRequest(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance \
       SetFirstSoftwareType \
       RequestComputerPartition \
+      Tic \
+      RequestComputerPartition \
+      Tic \
+      RequestComputerPartitionWithAnotherSoftwareType \
       Tic \
       RequestComputerPartitionWithAnotherSoftwareType \
       Tic \
