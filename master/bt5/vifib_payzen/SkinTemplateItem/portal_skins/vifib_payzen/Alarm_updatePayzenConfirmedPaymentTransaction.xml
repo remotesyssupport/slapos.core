@@ -58,8 +58,9 @@ for payment_transaction in portal.portal_catalog(\n
       specialise_relative_url=sale_trade_condition,\n
       simulation_state="confirmed",\n
       ):\n
+  # do not trust catalog\n
   if payment_transaction.getSimulationState() == \'confirmed\':\n
-    payment_transcation.PaymentTransaction_updateStatus()\n
+    payment_transaction.PaymentTransaction_updateStatus()\n
 </string> </value>
         </item>
         <item>
