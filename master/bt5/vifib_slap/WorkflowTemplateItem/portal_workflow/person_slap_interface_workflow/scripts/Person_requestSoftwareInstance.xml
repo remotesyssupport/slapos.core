@@ -161,8 +161,8 @@ if (request_software_instance is None):\n
       portal_type="Open Sale Order Line",\n
       title=software_title,\n
       aggregate_value=subscription,\n
-      start_date=start_date,\n
-      stop_date=stop_date,\n
+#       start_date=start_date,\n
+#       stop_date=stop_date,\n
       quantity=1,\n
       price=1,\n
       specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
