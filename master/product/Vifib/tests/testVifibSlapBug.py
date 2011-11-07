@@ -219,7 +219,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
 
       # Create first computer
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
       SlapLoginCurrentComputer
@@ -313,7 +316,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       # Now prepare second computer
 
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
       SlapLoginCurrentComputer
@@ -339,6 +345,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       RestoreComputerUidFromBufferA
       RestoreSoftwareInstanceUidFromBufferA
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       RequestComputerPartition
       Tic
       SlapLogout
@@ -567,7 +577,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
 
       # Create first computer
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
       SlapLoginCurrentComputer
@@ -678,7 +691,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
 
       # Create the computer
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
       SlapLoginCurrentComputer
@@ -720,6 +736,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance
       RequestComputerPartition
       Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
+      RequestComputerPartition
+      Tic
       SlapLogout
 
       LoginDefaultUser
@@ -740,6 +760,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       # From B request C
       SelectRequestedReferenceC
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       RequestComputerPartition
       Tic
       SlapLogout
@@ -818,7 +842,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
 
       # Create the computer
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
       SlapLoginCurrentComputer
@@ -859,6 +886,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       SlapLoginCurrentSoftwareInstance
       RequestComputerPartition
       Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
+      RequestComputerPartition
+      Tic
       SlapLogout
 
       LoginDefaultUser
@@ -879,6 +910,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       # From B request C
       SelectRequestedReferenceC
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       RequestComputerPartition
       Tic
       SlapLogout
@@ -967,7 +1002,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
 
       # Create the computer
       LoginTestVifibAdmin
-      CreateComputer
+      CustomerRegisterNewComputer
+      Tic
+      SetComputerCoordinatesFromComputerTitle
+      ComputerSetAllocationScopeOpenPublic
       Tic
       Logout
       SlapLoginCurrentComputer
@@ -1006,6 +1044,10 @@ class TestVifibSlapBug(TestVifibSlapWebServiceMixin):
       # From root request B
       SelectRequestedReferenceB
       SlapLoginCurrentSoftwareInstance
+      RequestComputerPartition
+      Tic
+      CheckRaisesNotFoundComputerPartitionParameterDict
+      Tic
       RequestComputerPartition
       Tic
       SlapLogout

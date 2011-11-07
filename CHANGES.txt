@@ -1,9 +1,25 @@
 Changes
 =======
 
-0.17 (unreleased)
+0.20 (unreleased)
 -----------------
 
+ * No changes yet.
+
+0.19 (2011-11-07)
+-----------------
+
+ * bang: Executable to be called by being banged computer. [Łukasz Nowak]
+
+0.18 (2011-10-18)
+-----------------
+
+ * Fix 0.17 release: missing change for slap library. [Łukasz Nowak]
+
+0.17 (2011-10-18)
+-----------------
+
+ * slap: Avoid request under the hood. [Łukasz Nowak]
  * slap: ComputerPartition.bang provided. It allows to update all instances
    in tree. [Łukasz Nowak]
  * slap: Computer.bang provided. It allows to bang all instances on computer.
