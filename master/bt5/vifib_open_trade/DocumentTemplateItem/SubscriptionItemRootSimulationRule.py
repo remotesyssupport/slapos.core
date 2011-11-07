@@ -1,7 +1,8 @@
 # -- coding: utf-8 --
 ##############################################################################
 #
-# Copyright  2010 Nexedi SA and Contributors. All Rights Reserved.
+# Copyright (c) 2011 Nexedi SA and Contributors. All Rights Reserved.
+#                    Yingjie Xu <yxu@nexedi.com>
 #
 # WARNING: This program as such is intended to be used by professional
 # programmers who take the whole responsibility of assessing all potential
@@ -25,27 +26,20 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 ##############################################################################
+
 """
-XXX This file is experimental for new simulation implementation, and
-will replace DeliveryRule.
+This file is experimental.
 """
 
 import zope.interface
 from AccessControl import ClassSecurityInfo
 from Products.ERP5Type import Permissions, PropertySheet, interfaces
-from Products.ERP5Type.Document.Predicate import Predicate
 from Products.ERP5.mixin.rule import RuleMixin
-from Products.ERP5.mixin.movement_collection_updater import \
-     MovementCollectionUpdaterMixin
-from Products.ERP5.mixin.rule import MovementGeneratorMixin
 
-class SubscriptionItemRootSimulationRule(RuleMixin, MovementCollectionUpdaterMixin, Predicate):
-  """
-  Subscription Item Rule object generates future movements in relation
-  with subcription
+from DateTime.DateTime import DateTime
 
-  WARNING: what to do with movement split ?
-  """
+class SubscriptionItemRootSimulationRule(RuleMixin):
+
   # CMF Type Definition
   meta_type = 'ERP5 Subscription Item Root Simulation Rule'
   portal_type = 'Subscription Item Root Simulation Rule'
@@ -55,9 +49,7 @@ class SubscriptionItemRootSimulationRule(RuleMixin, MovementCollectionUpdaterMix
   security.declareObjectProtected(Permissions.AccessContentsInformation)
 
   # Declarative interfaces
-  zope.interface.implements(interfaces.IRule,
-                            interfaces.IDivergenceController,
-                            interfaces.IMovementCollectionUpdater,)
+  zope.interface.implements(interfaces.IRule,)
 
   # Default Properties
   property_sheets = (
@@ -72,36 +64,41 @@ class SubscriptionItemRootSimulationRule(RuleMixin, MovementCollectionUpdaterMix
     PropertySheet.Rule
     )
 
-  def _getMovementGenerator(self, context):
+  def getNextPeriodicalDate(self, date):
     """
-    Return the movement generator to use in the expand process
+    Returns the first day of next month in this implementation.
+    This method should be moved to Periodicity and carefully designed in the future.
     """
-    return SubscriptionItemRootSimulationRuleMovementGenerator(applied_rule=context, rule=self,
-              trade_phase_list=self.getTradePhaseList())
+    year = date.year()
+    month = date.month() + 1
+    if month > 12:
+      month -= 12
+      year += 1
+    return DateTime(year, month, 1)
 
-  def _getMovementGeneratorContext(self, context):
+  def expand(self, applied_rule, **kw):
     """
-    Return the movement generator context to use for expand
     """
-    return context
-
-  def _getMovementGeneratorMovementList(self, context):
-    """
-    Return the movement lists to provide to the movement generator
-    """
-    return []
-
-  def _isProfitAndLossMovement(self, movement):
-    # For most rules, a profit and loss movement lacks source
-    # or destination.
-    return (movement.getSource() is None or movement.getDestination() is None)
-
-class SubscriptionItemRootSimulationRuleMovementGenerator(MovementGeneratorMixin):
-  def _getUpdatePropertyDict(self, input_movement):
-    return self._applied_rule.getCausalityValue()._getUpdatePropertyDict(input_movement)
-
-  def _getInputMovementList(self, movement_list=None, rounding=None):
-    return self._applied_rule.getCausalityValue()._getInputMovementList(
-                   movement_list=movement_list, rounding=rounding)
-
-
+    subscription_item = applied_rule.getCausalityValue()
+    open_order_movement_list = subscription_item.getAggregateRelatedValueList(
+                                   portal_type = 'Open Sale Order Line')
+    for movement in open_order_movement_list:
+      start_date = movement.getStartDate()
+      stop_date = movement.getStopDate()
+      current_date = start_date
+      while current_date < stop_date:
+        next_date = self.getNextPeriodicalDate(current_date)
+        applied_rule.newContent(
+            portal_type = 'Simulation Movement',
+            aggregate_value = subscription_item,
+            resource = movement.getResource(),
+            start_date = current_date,
+            stop_date = next_date,
+            source = movement.getSource(),
+            source_section = movement.getSourceSection(),
+            destination = movement.getDestination(),
+            destination_section = movement.getDestinationSection(),
+            price = movement.getPrice(),
+            quantity = movement.getQuantity(),
+            )
+        current_date = next_date
