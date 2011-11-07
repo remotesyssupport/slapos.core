@@ -7,6 +7,60 @@
     <pickle>
       <dictionary>
         <item>
+            <key> <string>_Access_contents_information_Permission</string> </key>
+            <value>
+              <tuple>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Auditor</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Owner</string>
+              </tuple>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Add_portal_content_Permission</string> </key>
+            <value>
+              <tuple>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Owner</string>
+              </tuple>
+            </value>
+        </item>
+        <item>
+            <key> <string>_Modify_portal_content_Permission</string> </key>
+            <value>
+              <tuple>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Owner</string>
+              </tuple>
+            </value>
+        </item>
+        <item>
+            <key> <string>_View_Permission</string> </key>
+            <value>
+              <tuple>
+                <string>Assignee</string>
+                <string>Assignor</string>
+                <string>Associate</string>
+                <string>Auditor</string>
+                <string>Author</string>
+                <string>Manager</string>
+                <string>Owner</string>
+              </tuple>
+            </value>
+        </item>
+        <item>
             <key> <string>_identity_criterion</string> </key>
             <value>
               <persistent> <string encoding="base64">AAAAAAAAAAI=</string> </persistent>
@@ -22,11 +76,11 @@
             <key> <string>categories</string> </key>
             <value>
               <tuple>
-                <string>predecessor/trade_state/vifib/invoiced</string>
-                <string>trade_phase/vifib/account</string>
-                <string>successor/trade_state/vifib/accounted</string>
                 <string>delivery_builder/portal_deliveries/purchase_invoice_transaction_builder</string>
                 <string>delivery_builder/portal_deliveries/sale_invoice_transaction_builder</string>
+                <string>trade_phase/default/accounting</string>
+                <string>predecessor/trade_state/invoiced</string>
+                <string>successor/trade_state/accounted</string>
               </tuple>
             </value>
         </item>
@@ -41,8 +95,8 @@
             </value>
         </item>
         <item>
-            <key> <string>default_reference</string> </key>
-            <value> <string>vifib_account</string> </value>
+            <key> <string>deliverable</string> </key>
+            <value> <int>0</int> </value>
         </item>
         <item>
             <key> <string>description</string> </key>
@@ -61,7 +115,11 @@
         </item>
         <item>
             <key> <string>id</string> </key>
-            <value> <string>4</string> </value>
+            <value> <string>account</string> </value>
+        </item>
+        <item>
+            <key> <string>int_index</string> </key>
+            <value> <int>3</int> </value>
         </item>
         <item>
             <key> <string>portal_type</string> </key>
@@ -76,7 +134,10 @@
   </record>
   <record id="2" aka="AAAAAAAAAAI=">
     <pickle>
-      <global name="PersistentMapping" module="Persistence.mapping"/>
+      <tuple>
+        <global name="PersistentMapping" module="Persistence.mapping"/>
+        <tuple/>
+      </tuple>
     </pickle>
     <pickle>
       <dictionary>
@@ -91,7 +152,10 @@
   </record>
   <record id="3" aka="AAAAAAAAAAM=">
     <pickle>
-      <global name="PersistentMapping" module="Persistence.mapping"/>
+      <tuple>
+        <global name="PersistentMapping" module="Persistence.mapping"/>
+        <tuple/>
+      </tuple>
     </pickle>
     <pickle>
       <dictionary>
