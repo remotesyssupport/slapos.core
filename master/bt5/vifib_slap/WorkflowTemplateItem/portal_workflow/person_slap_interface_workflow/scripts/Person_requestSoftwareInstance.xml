@@ -53,6 +53,7 @@
             <value> <string encoding="cdata"><![CDATA[
 
 from DateTime import DateTime\n
+from Products.ERP5Type.DateUtils import getClosestDate, addToDate\n
 person = state_change[\'object\']\n
 portal = person.getPortalObject()\n
 # Get required arguments\n
@@ -156,13 +157,17 @@ if (request_software_instance is None):\n
         open_order = portal.restrictedTraverse(open_order_url)\n
       else:\n
         raise ValueError(\'Person has no open order created\')\n
+\n
+    start_date = DateTime()\n
+    # 12 months of subscription by default\n
+    stop_date = addToDate(getClosestDate(target_date=start_date, precision=\'month\', before=0), year=1)\n
   \n
     open_order.newContent(\n
       portal_type="Open Sale Order Line",\n
       title=software_title,\n
       aggregate_value=subscription,\n
-#       start_date=start_date,\n
-#       stop_date=stop_date,\n
+      start_date=start_date,\n
+      stop_date=stop_date,\n
       quantity=1,\n
       price=1,\n
       specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
