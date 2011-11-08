@@ -178,6 +178,95 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
   ########################################
   # Steps -- scenarios
   ########################################
+  def stepCheckComputerTradeConditionDestinationSectionTestVifibCustomer(
+      self, sequence, **kw):
+    computer = self.portal.portal_catalog.getResultValue(
+      uid=sequence['computer_uid'])
+    trade_condition = computer.getAggregateRelatedValue(
+      portal_type='Sale Supply Line').getParentValue()
+    person_url = self.portal.portal_catalog.getResultValue(portal_type='Person',
+      default_email_text='test_customer@example.org').getRelativeUrl()
+    self.assertEqual(trade_condition.getDestinationSectionList(), [person_url])
+
+  def stepPersonRequestSlapSoftwareInstancePrepare(self, sequence,
+      **kw):
+    software_release = sequence['software_release_uri']
+    self.slap = slap.slap()
+    self.slap.initializeConnection(self.server_url, timeout=None)
+    open_order = self.slap.registerOpenOrder()
+    open_order.request(
+       software_release=software_release,
+       software_type=sequence.get('software_type', 'software_type'),
+       partition_reference=sequence.get('requested_reference',
+          'requested_reference'),
+       partition_parameter_kw=sequence.get('requested_parameter_dict', {}),
+       filter_kw=sequence.get('requested_filter_dict', {}),
+       state=sequence.get('requested_state')
+       )
+
+  def stepPersonRequestSlapSoftwareInstance(self, sequence, **kw):
+    software_release = sequence['software_release_uri']
+    self.slap = slap.slap()
+    self.slap.initializeConnection(self.server_url, timeout=None)
+    open_order = self.slap.registerOpenOrder()
+    requested_slap_computer_partition = open_order.request(
+       software_release=software_release,
+       software_type=sequence.get('software_type', 'software_type'),
+       partition_reference=sequence.get('requested_reference',
+         'requested_reference'),
+       partition_parameter_kw=sequence.get('requested_parameter_dict', {}),
+       filter_kw=sequence.get('requested_filter_dict', {}),
+       state=sequence.get('requested_state'))
+    sequence.edit(
+        requested_slap_computer_partition=requested_slap_computer_partition,
+        requested_computer_partition_reference=\
+            requested_slap_computer_partition.getId())
+
+  def stepSetCurrentPersonSlapRequestedSoftwareInstance(self, sequence, **kw):
+    cleanup_resource = self.portal.portal_preferences\
+      .getPreferredInstanceCleanupResource()
+    software_instance_list = []
+    for software_instance in self.portal.portal_catalog(
+        portal_type=self.software_instance_portal_type,
+        title=sequence['requested_reference']):
+      # only not yet destroyed ones
+      try:
+        software_instance.Item_getInstancePackingListLine(cleanup_resource)
+      except ValueError:
+        software_instance_list.append(software_instance)
+
+    self.assertEqual(1, len(software_instance_list))
+    software_instance = software_instance_list[0]
+    sequence.edit(
+        software_instance_uid=software_instance.getUid(),
+        software_instance_reference=software_instance.getReference(),
+        hosting_subscription_uid=software_instance.getAggregateRelatedValue(
+          portal_type='Sale Order Line').getAggregateValue(
+            portal_type='Hosting Subscription').getUid())
+
+  def stepSoftwareInstanceSaleOrderConfirmRaisesValueError(self, sequence,
+    **kw):
+    """Checks that current software instance is realted only with sale order
+    
+    and that this sale order cannot be confirmed
+    
+    In Vifib implementation sale order which cannot find free computer partition
+    raises ValueError"""
+    software_instance = self.portal.portal_catalog.getResultValue(
+      uid=sequence['software_instance_uid'])
+
+    aggregate_value_list = software_instance.getAggregateRelatedValueList(
+        portal_type=[self.sale_packing_list_line_portal_type,
+        self.sale_order_line_portal_type])
+
+    self.assertEqual(1, len(aggregate_value_list))
+    self.assertTrue(self.sale_order_line_portal_type in [q.getPortalType() for\
+        q in aggregate_value_list])
+    sale_order_line = aggregate_value_list[0]
+    sale_order = sale_order_line.getParentValue()
+
+    self.assertRaises(ValueError, sale_order.confirm)
+
   def stepCheckViewCurrentSoftwareInstance(self, sequence, **kw):
     software_instance = self.portal.portal_catalog.getResultValue(
         uid=sequence['software_instance_uid'])
@@ -374,7 +463,8 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     person = self.portal.ERP5Site_getAuthenticatedMemberPersonValue()
     software_release = self.portal.portal_catalog.getResultValue(
         uid=sequence['software_release_uid'])
-    software_title = self.id() + str(random())
+    software_title = sequence.get('software_title',
+      self.id() + str(random()))
 
     if 'software_type' not in kw:
       kw['software_type'] = sequence.get('requested_software_type',
@@ -396,9 +486,16 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     # duplication
     software_instance_portal_type = kw.get("instance_portal_type",
                                   self.software_instance_portal_type)
-    software_instance_list = self.portal.portal_catalog(
+    software_instance_list = []
+    cleanup_resource = self.portal.portal_preferences\
+      .getPreferredInstanceCleanupResource()
+    for software_instance in self.portal.portal_catalog(
         portal_type=software_instance_portal_type,
-        title=software_title)
+        title=software_title):
+      try:
+        software_instance.Item_getInstancePackingListLine(cleanup_resource)
+      except ValueError:
+        software_instance_list.append(software_instance)
     self.assertEqual(1, len(software_instance_list))
     software_instance = software_instance_list[0]
     sequence.edit(
@@ -3335,9 +3432,13 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_partition = computer_partition_list[0]
 
     # This Computer Partition shall have only Sale Packing List Line related
-    computer_partition_sale_packing_list_line_list = computer_partition\
+    computer_partition_sale_packing_list_line_list = []
+    for delivery_line in computer_partition\
         .getAggregateRelatedValueList(
-            portal_type=self.sale_packing_list_line_portal_type)
+            portal_type=self.sale_packing_list_line_portal_type):
+      if sequence['software_instance_uid'] in delivery_line\
+          .getAggregateUidList():
+        computer_partition_sale_packing_list_line_list.append(delivery_line)
     self.assertEqual(1, len(computer_partition_sale_packing_list_line_list))
 
     # There should be only one Sale Order Line
@@ -3354,9 +3455,12 @@ class TestVifibSlapWebServiceMixin(testVifibMixin):
     computer_partition = computer_partition_list[0]
 
     # This Computer Partition shall have only Sale Order Line related
-    computer_partition_sale_order_line_list = computer_partition\
+    computer_partition_sale_order_line_list = []
+    for order_line in computer_partition\
         .getAggregateRelatedValueList(
-            portal_type=self.sale_order_line_portal_type)
+            portal_type=self.sale_order_line_portal_type):
+      if sequence['software_instance_uid'] in order_line.getAggregateUidList():
+        computer_partition_sale_order_line_list.append(order_line)
     self.assertEqual(1, len(computer_partition_sale_order_line_list))
 
   def stepCheckSoftwareInstanceAndRelatedComputerPartition(self,
