@@ -108,6 +108,7 @@ if (request_software_instance is None):\n
       reference=hosting_subscription_reference,\n
       title=software_title,\n
       specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
+      periodicity_month_frequency=1,\n
       activate_kw={\'tag\': tag},\n
     )\n
     subscription.validate()\n
