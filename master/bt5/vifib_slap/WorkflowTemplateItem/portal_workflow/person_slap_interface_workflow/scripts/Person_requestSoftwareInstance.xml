@@ -161,7 +161,7 @@ if (request_software_instance is None):\n
       else:\n
         raise ValueError(\'Person has no open order created\')\n
 \n
-    start_date = DateTime()\n
+    start_date = getClosestDate(target_date=start_date, precision=\'day\', before=0)\n
     # 12 months of subscription by default\n
     stop_date = addToDate(getClosestDate(target_date=start_date, precision=\'month\', before=0), year=1)\n
   \n
