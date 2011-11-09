@@ -7,7 +7,7 @@ from DateTime.DateTime import DateTime
 class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
 
   def stepCheckSimulationMovement(self, sequence, **kw):
-    person = self.portal.ERP5Site_getAuthenticatedMemberPersonValue()
+    person = self.portal.person_module['test_vifib_customer']
     open_order = person.getDestinationDecisionRelatedValue(
         portal_type="Open Sale Order")
     open_order_line_list = open_order.contentValues(
@@ -71,48 +71,52 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
     self.assertEquals(len(expected_time_frame_list),
                       len(applied_rule.contentValues()) + 1)
 
-    # This unit test stops here, how to get these movements?
-
     # Check the list of expected simulation
     idx = 0
     while idx + 1 < len(expected_time_frame_list):
-      simulation_movement = self.portal.portal_catalog.getResultValue(
+      simulation_movement_list = \
+        self.portal.portal_catalog.unrestrictedSearchResults(
           parent_uid=applied_rule.getUid(),
           portal_type="Simulation Movement",
           **{
             'movement.start_date':expected_time_frame_list[idx],
             'movement.stop_date':expected_time_frame_list[idx + 1]
           })
+      self.assertEquals(1, len(simulation_movement_list))
+      simulation_movement = simulation_movement_list[0].getObject()
       self.assertNotEquals(None, simulation_movement)
 
       # Check simulation movement property
-      self.assertNotEquals(1, simulation_movement.getQuantity())
-      self.assertNotEquals("XXX", simulation_movement.getQuantityUnit())
-      self.assertNotEquals(1, simulation_movement.getPrice())
-      self.assertNotEquals("EUR", simulation_movement.getPriceCurrency())
+      self.assertEquals(1, simulation_movement.getQuantity())
+      self.assertEquals("XXX", simulation_movement.getQuantityUnit())
+      self.assertEquals(1, simulation_movement.getPrice())
+      self.assertEquals("EUR", simulation_movement.getPriceCurrency())
       # XXX supplier
-      self.assertNotEquals("XXX", simulation_movement.getSource())
-      self.assertNotEquals("XXX", simulation_movement.getSourceSection())
+      self.assertEquals("XXX", simulation_movement.getSource())
+      self.assertEquals("XXX", simulation_movement.getSourceSection())
       # XXX customer
-      self.assertNotEquals("XXX", simulation_movement.getDestination())
-      self.assertNotEquals("XXX", simulation_movement.getDestinationSection())
+      self.assertEquals("XXX", simulation_movement.getDestination())
+      self.assertEquals("XXX", simulation_movement.getDestinationSection())
 
-      self.assertNotEquals("XXX", simulation_movement.getSpecialise())
+      self.assertEquals("XXX", simulation_movement.getSpecialise())
 
-      self.assertNotEquals("XXX", simulation_movement.getResource())
+      self.assertEquals("XXX", simulation_movement.getResource())
+      self.assertEquals("XXX", simulation_movement.getTradePhase())
 
-      self.assertNotEquals("XXX",
+      self.assertEquals("XXX",
                            simulation_movement.getAggregate(
                              portal_type="Computer Partition"))
-      self.assertNotEquals("XXX",
+      self.assertEquals("XXX",
                            simulation_movement.getAggregate(
                              portal_type="Software Instance"))
-      self.assertNotEquals("XXX",
+      self.assertEquals("XXX",
                            simulation_movement.getAggregate(
                              portal_type="Hosting Subscription"))
-      self.assertNotEquals("XXX",
+      self.assertEquals("XXX",
                            simulation_movement.getAggregate(
                              portal_type="Software Release"))
+
+      idx += 1
 
   def test_OpenOrder_request_changeSoftwareType(self):
     """
@@ -122,7 +126,7 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
     self.computer_partition_amount = 1
     sequence_list = SequenceList()
     sequence_string = self.prepare_person_requested_software_instance + """
-      LoginTestVifibCustomer
+      LoginDefaultUser
       CheckSimulationMovement
       Tic
       SlapLogout
