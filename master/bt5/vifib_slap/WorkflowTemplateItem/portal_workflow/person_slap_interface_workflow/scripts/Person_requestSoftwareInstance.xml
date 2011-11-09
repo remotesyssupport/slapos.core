@@ -172,6 +172,7 @@ if (request_software_instance is None):\n
       stop_date=stop_date,\n
       quantity=1,\n
       price=1,\n
+      specialise=sale_order.getSpecialise(portal_type="Sale Trade Condition"),\n
       activate_kw={\'tag\': tag},\n
     )\n
 \n
