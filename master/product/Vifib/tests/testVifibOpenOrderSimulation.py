@@ -125,7 +125,8 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
     """
     self.computer_partition_amount = 1
     sequence_list = SequenceList()
-    sequence_string = self.prepare_person_requested_software_instance + """
+    sequence_string = \
+        self.prepare_installed_computer_partition_sequence_string + """
       LoginDefaultUser
       CheckSimulationMovement
       Tic
