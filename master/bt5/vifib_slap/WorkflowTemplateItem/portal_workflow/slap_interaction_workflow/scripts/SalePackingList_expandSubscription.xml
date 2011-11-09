@@ -59,6 +59,11 @@ sale_packing_list_line = sale_packing_list_line_list[0]\n
 resource = sale_packing_list_line.getResource()\n
 if resource == preference_tool.getPreferredInstanceSetupResource():\n
   subscription = sale_packing_list_line.getAggregateValue(portal_type=[\'Hosting Subscription\'])\n
+\n
+  for open_order_line in subscription.getAggregateRelatedValueList(portal_type="Open Sale Order Line"):\n
+    if not open_order_line.hasSpecialise():\n
+      open_order_line.setSpecialise(sale_packing_list.getSpecialise())\n
+\n
   subscription.Delivery_updateSimulation()\n
 </string> </value>
         </item>
