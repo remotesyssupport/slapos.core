@@ -71,6 +71,8 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
     self.assertEquals(len(expected_time_frame_list),
                       len(applied_rule.contentValues()) + 1)
 
+    # This unit test stops here, how to get these movements?
+
     # Check the list of expected simulation
     idx = 0
     while idx + 1 < len(expected_time_frame_list):
@@ -81,7 +83,6 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
             'movement.start_date':expected_time_frame_list[idx],
             'movement.stop_date':expected_time_frame_list[idx + 1]
           })
-      import pdb; pdb.set_trace()
       self.assertNotEquals(None, simulation_movement)
 
       # Check simulation movement property
