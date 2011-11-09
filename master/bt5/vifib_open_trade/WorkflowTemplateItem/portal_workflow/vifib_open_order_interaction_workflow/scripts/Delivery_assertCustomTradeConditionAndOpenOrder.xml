@@ -80,6 +80,14 @@ if custom_trade_condition is None:\n
 \n
 if order.getSpecialise() != custom_trade_condition.getRelativeUrl():\n
   order.setSpecialiseValue(custom_trade_condition, portal_type="Sale Trade Condition")\n
+\n
+# Update the open order line\n
+for order_line in order.getMovementList():\n
+  hosting_subscription = order_line.getAggregateValue(portal_type="Hosting Subscription")\n
+  for open_order_line in self.getAggregateRelatedValueList(portal_type="Open Sale Order Line"):\n
+    if open_order_line.getSpecialise() != custom_trade_condition.getRelativeUrl():\n
+      open_order_line.setSpecialiseValue(custom_trade_condition, portal_type="Sale Trade Condition")\n
+\n
 if portal.portal_workflow.isTransitionPossible(custom_trade_condition, \'validate\'):\n
   custom_trade_condition.validate()\n
 </string> </value>
