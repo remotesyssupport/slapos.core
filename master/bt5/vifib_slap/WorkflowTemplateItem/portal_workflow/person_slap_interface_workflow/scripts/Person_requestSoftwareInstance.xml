@@ -107,7 +107,6 @@ if (request_software_instance is None):\n
       portal_type=hosting_subscription_portal_type,\n
       reference=hosting_subscription_reference,\n
       title=software_title,\n
-      specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
       periodicity_hour_list=[0],\n
       periodicity_minute_list=[0],\n
       periodicity_month_day=[1],\n
