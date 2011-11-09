@@ -172,7 +172,6 @@ if (request_software_instance is None):\n
       stop_date=stop_date,\n
       quantity=1,\n
       price=1,\n
-      specialise_value=\'sale_trade_condition_module/vifib_trade_condition\', # fix me\n
       activate_kw={\'tag\': tag},\n
     )\n
 \n
