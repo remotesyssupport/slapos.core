@@ -62,7 +62,12 @@ if resource == preference_tool.getPreferredInstanceSetupResource():\n
 \n
   for open_order_line in subscription.getAggregateRelatedValueList(portal_type="Open Sale Order Line"):\n
     if not open_order_line.hasSpecialise():\n
-      open_order_line.setSpecialise(sale_packing_list.getSpecialise())\n
+      # open_order_line.setSpecialise(sale_packing_list.getSpecialise())\n
+      open_order = open_order_line.getParent()\n
+      open_order.OpenSaleOrder_restrictMethodAsShadowUser(\n
+                    open_order=open_order,\n
+                    callable_object=open_order_line.setSpecialise,\n
+                    argument_list=[sale_packing_list.getSpecialise()])\n
 \n
   subscription.Delivery_updateSimulation()\n
 </string> </value>
