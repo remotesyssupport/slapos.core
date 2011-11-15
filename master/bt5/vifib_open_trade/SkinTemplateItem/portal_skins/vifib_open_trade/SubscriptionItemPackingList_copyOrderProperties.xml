@@ -57,7 +57,7 @@ from Products.ERP5Type.Message import translateString\n
 \n
 packing_list = context\n
 \n
-hosting_subscription = packing_list.getAggregatedValue(portal_type=\'Hosting Subscription\')\n
+hosting_subscription = packing_list.getAggregateValue(portal_type=\'Hosting Subscription\')\n
 packing_list.edit(\n
     source=hosting_subscription.getSource(),\n
     source_section=hosting_subscription.getSourceSection(),\n
