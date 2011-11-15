@@ -1,5 +1,6 @@
-from Products.ERP5Type.tests.Sequence import SequenceList
 import unittest
+from Products.ERP5Type.tests.Sequence import SequenceList
+from Products.ERP5Type.DateUtils import getClosestDate, addToDate
 from testVifibSlapWebService import TestVifibSlapWebServiceMixin
 
 from DateTime.DateTime import DateTime
@@ -33,39 +34,28 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
     self.assertEquals([1], hosting_subscription.getPeriodicityMonthDayList())
     self.assertEquals(None, hosting_subscription.getPeriodicityWeekFrequency())
 
-    today = DateTime()
-    year = today.year()
-    month = today.month()
-    day = today.day()
-    self.assertEquals(year, open_order_line.getStartDate().year())
-    self.assertEquals(month, open_order_line.getStartDate().month())
-    self.assertEquals(day, open_order_line.getStartDate().day())
-    to_year = year + 1
-    to_month = month + 1
-    if to_month > 12:
-      to_year += 1
-      to_month -=12
-    to_day = 1
-    self.assertEquals(to_year, open_order_line.getStopDate().year())
-    self.assertEquals(to_month, open_order_line.getStopDate().month())
-    self.assertEquals(to_day, open_order_line.getStopDate().day())
+    # Should check timezone information here?
+    today = getClosestDate(target_date=DateTime(), precision='day', before=1)
+    self.assertEquals(today.year(), open_order_line.getStartDate().year())
+    self.assertEquals(today.month(), open_order_line.getStartDate().month())
+    self.assertEquals(today.day(), open_order_line.getStartDate().day())
+    self.assertEquals(0, open_order_line.getStartDate().hour())
+    self.assertEquals(0, open_order_line.getStartDate().minute())
+    self.assertEquals(0.0, open_order_line.getStartDate().second())
+    stop_date = addToDate(getClosestDate(target_date=today, precision='month', before=0), year=1)
+    self.assertEquals(stop_date.year(), open_order_line.getStopDate().year())
+    self.assertEquals(stop_date.month(), open_order_line.getStopDate().month())
+    self.assertEquals(stop_date.day(), open_order_line.getStopDate().day())
+    self.assertEquals(0, open_order_line.getStopDate().hour())
+    self.assertEquals(0, open_order_line.getStopDate().minute())
+    self.assertEquals(0.0, open_order_line.getStopDate().second())
 
     # Calculate the list of time frames
     expected_time_frame_list = []
-    current_year = year
-    current_month = month + 1
-    if current_month > 12:
-      current_year += 1
-      current_month -= 12
-    current_day = 1
-    current = DateTime(current_year, current_month, current_day)
-    while current <= DateTime(to_year, to_month, to_day):
+    current = getClosestDate(target_date=today, precision='month', before=0)
+    while current <= stop_date:
       expected_time_frame_list.append(current)
-      current_month += 1
-      if current_month > 12:
-        current_year += 1
-        current_month -= 12
-      current = DateTime(current_year, current_month, current_day)
+      current = addToDate(getClosestDate(target_date=current, precision='month', before=0), month=1)
 
     # Check that simulation is created by the periodicity
     self.assertEquals(len(expected_time_frame_list),
@@ -80,41 +70,41 @@ class TestVifibOpenOrderSimulation(TestVifibSlapWebServiceMixin):
           portal_type="Simulation Movement",
           **{
             'movement.start_date':expected_time_frame_list[idx],
-            'movement.stop_date':expected_time_frame_list[idx + 1]
+            'movement.stop_date':expected_time_frame_list[idx + 1],
           })
       self.assertEquals(1, len(simulation_movement_list))
       simulation_movement = simulation_movement_list[0].getObject()
       self.assertNotEquals(None, simulation_movement)
 
       # Check simulation movement property
-      self.assertEquals(1, simulation_movement.getQuantity())
-      self.assertEquals("XXX", simulation_movement.getQuantityUnit())
-      self.assertEquals(1, simulation_movement.getPrice())
-      self.assertEquals("EUR", simulation_movement.getPriceCurrency())
+      self.assertEquals(1.0, simulation_movement.getQuantity())
+      self.assertEquals(None, simulation_movement.getQuantityUnit())
+      self.assertEquals(1.0, simulation_movement.getPrice())
+      self.assertEquals(None, simulation_movement.getPriceCurrency())
       # XXX supplier
-      self.assertEquals("XXX", simulation_movement.getSource())
-      self.assertEquals("XXX", simulation_movement.getSourceSection())
+      self.assertEquals(None, simulation_movement.getSource())
+      self.assertEquals(None, simulation_movement.getSourceSection())
       # XXX customer
-      self.assertEquals("XXX", simulation_movement.getDestination())
-      self.assertEquals("XXX", simulation_movement.getDestinationSection())
+      self.assertEquals(None, simulation_movement.getDestination())
+      self.assertEquals("person_module/test_vifib_customer", simulation_movement.getDestinationSection())
 
-      self.assertEquals("XXX", simulation_movement.getSpecialise())
+      self.assertEquals(None, simulation_movement.getSpecialise())
 
-      self.assertEquals("XXX", simulation_movement.getResource())
-      self.assertEquals("XXX", simulation_movement.getTradePhase())
+      self.assertEquals(None, simulation_movement.getResource())
+      self.assertEquals("default/delivery", simulation_movement.getTradePhase())
 
-      self.assertEquals("XXX",
-                           simulation_movement.getAggregate(
-                             portal_type="Computer Partition"))
-      self.assertEquals("XXX",
-                           simulation_movement.getAggregate(
-                             portal_type="Software Instance"))
-      self.assertEquals("XXX",
-                           simulation_movement.getAggregate(
-                             portal_type="Hosting Subscription"))
-      self.assertEquals("XXX",
-                           simulation_movement.getAggregate(
-                             portal_type="Software Release"))
+      # self.assertEquals("XXX",
+      #                      simulation_movement.getAggregate(
+      #                        portal_type="Computer Partition"))
+      # self.assertEquals("XXX",
+      #                      simulation_movement.getAggregate(
+      #                        portal_type="Software Instance"))
+      # self.assertEquals("XXX",
+      #                      simulation_movement.getAggregate(
+      #                        portal_type="Hosting Subscription"))
+      # self.assertEquals("XXX",
+      #                      simulation_movement.getAggregate(
+      #                        portal_type="Software Release"))
 
       idx += 1
 
