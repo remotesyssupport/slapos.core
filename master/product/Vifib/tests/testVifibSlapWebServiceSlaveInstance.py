@@ -4,6 +4,8 @@ import unittest
 from Products.ERP5Type.tests.backportUnittest import skip
 
 class TestVifibSlapWebServiceSlaveInstance(TestVifibSlapWebServiceMixin):
+
+
   def test_SlaveInstance_Person_request_with_Different_User(self):
     """
       Check that user B can declare a slot of slave instance in computer
@@ -440,14 +442,12 @@ class TestVifibSlapWebServiceSlaveInstance(TestVifibSlapWebServiceMixin):
       LoginTestVifibCustomer
       RequestDestroySoftwareInstanceFromCurrentComputerPartition
       Tic
-      SetDeliveryLineAmountEqualOne
-      CheckComputerPartitionInstanceHostingSalePackingListStopped
+      SetDeliveryLineAmountEqualTwo
       CheckComputerPartitionInstanceCleanupSalePackingListConfirmed
-
       SlapLoginCurrentComputer
       SoftwareInstanceDestroyed
       Tic
-      CheckComputerPartitionInstanceHostingSalePackingListStopped
+      LoginDefaultUser
       CheckComputerPartitionInstanceCleanupSalePackingListDelivered
       Logout
     """
